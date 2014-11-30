@@ -188,7 +188,7 @@ function confirmaFinalizacao(servicoID, nivelUsuario){
  <%if(rs.next()){ %>
  <table width="696" align="center" cellpadding="2" cellspacing="2">
   <tr bgcolor="#EEEEEE">
-   <td colspan="4" align="center"><strong>VISUALIZAR ORDEM DE SERVI&Ccedil;O</strong></td>
+   <td colspan="6" align="center"><strong>VISUALIZAR ORDEM DE SERVI&Ccedil;O</strong></td>
   </tr>
   <tr>
     <td align="left">N&deg; Servi&ccedil;o</td>
@@ -207,6 +207,7 @@ function confirmaFinalizacao(servicoID, nivelUsuario){
     Tel: <%=rs.getString("clienteTelefone") %> &nbsp;&nbsp;&nbsp;
     Cel: <%=rs.getString("clienteCelular") %> <%=rs.getString("operadoraCelular") %>
     </td>
+    <td><%=rs.getString("clienteEmail") %></td>
     </tr>
   <tr bgcolor="#F9F6F2">
     <td align="left"><%if(session.getAttribute("nivel").equals("1") || session.getAttribute("nivel").equals("2")){ %>VALOR TOTAL<%} %></td>
@@ -216,14 +217,14 @@ function confirmaFinalizacao(servicoID, nivelUsuario){
     </td>
   </tr>
   <tr bgcolor="#FFFF99">
-   <td colspan="4" align="center">Descri&ccedil;&atilde;o do Servi&ccedil;o </td>
+   <td colspan="6" align="center">Descri&ccedil;&atilde;o do Servi&ccedil;o </td>
    </tr>
   <tr>
-   <td colspan="4" align="center">
+   <td colspan="6" align="center">
     <pre style="white-space:pre-line; width:696px; text-align:left"><%=rs.getString("descricao")%></pre>   </td>
   </tr>
   <tr>
-    <td colspan="4" align="center"><hr color="#FFFF99" /></td>
+    <td colspan="6" align="center"><hr color="#FFFF99" /></td>
   </tr>
   <!-- <tr valign="middle">
     <td colspan="4" align="center" bgcolor="#52658C"><font color="#FFFFFF">Servi&ccedil;os Adicionados</font></td>
@@ -251,10 +252,10 @@ function confirmaFinalizacao(servicoID, nivelUsuario){
     <td align="left">&nbsp;</td>
   </tr>-->
   <tr align="center" valign="middle" bgcolor="#52658C">
-    <td colspan="4"><font color="#FFFFFF">Produtos Adicionados</font></td>
+    <td colspan="6"><font color="#FFFFFF">Produtos Adicionados</font></td>
     </tr>
   <tr>
-    <td colspan="4" align="center">
+    <td colspan="6" align="center">
     
       
         <%int i =0;

@@ -1,4 +1,3 @@
-
 <%@ page import="java.sql.*" %>
 <%@ include file="inc/conexao.jsp" %>
 <%@ include file="inc/seguranca.jsp" %>
@@ -156,7 +155,7 @@ function fechar(){
 </head>
 <body bgcolor="#EEEEEE" onLoad="javascript: imprimirCupom()">
 
-<div id="cupom" style="background-color:#FFFFFF; width:500px; font-family:'Courier New', Courier, monospace; margin-left:auto; margin-right:auto">
+<div id="cupom" style="background-color:#FFFFFF; width:500px; font-family:'Courier New', Courier, monospace; margin-left:5px; margin-right:auto">
 
 <table width="485" align="center">
 
@@ -170,8 +169,11 @@ String data = formatar.converteDeData(dataSemFormatacao);
 
 String dataPrevicao = String.valueOf(rs02.getDate("dataPrevista"));
 String dtPrevi = formatar.converteDeData(dataPrevicao);
+String dtfim = "";
 %>
-<%if(rs02.getInt("tipo") != 0) {%>
+<%if(rs02.getInt("tipo") != 0) {
+
+%>
 <tr>
 	<td>
 		<h1>ORÇAMENTO</h1>
@@ -180,8 +182,8 @@ String dtPrevi = formatar.converteDeData(dataPrevicao);
 <%} %>
 <tr>
  <td width="152" align="left">N&deg; O.S. <%=rs02.getString("OS") %>/<%=rs02.getString("anoServico").substring(0,4) %></td>
- <td width="158" align="center"><%=data %></td>
- <td width="159" align="right"><%=rs02.getTime("datafim") %></td>
+ <td width="158" align="center"><%=data%></td>
+ <td width="159" align="left"><%=rs02.getTime("datafim") %></td>
  
 </tr>
 <tr>
@@ -252,6 +254,7 @@ String dtPrevi = formatar.converteDeData(dataPrevicao);
  <td align="left" colspan="7">Produtos</td>
 </tr>
 <%
+String prd = "";
 //Enquanto não for final de arquivo lista os produtos adicionados à O.S.
 while(rs.next()){
 %>
@@ -267,9 +270,10 @@ while(rs.next()){
  	preco = formato.format(rs.getDouble("valor"));
 	//total = formato.format(rs.getDouble("val"));
 	//total = "0";
+   prd = rs.getString("nome");
   %>
  <tr>
-  <td colspan="2" align="left"><strong><%=rs.getString("nome")%></strong></td><td><%=preco%></td>
+  <td colspan="2" align="left"><strong><%=prd %></strong></td><td><%=preco%></td>
  </tr>
  <tr>
   <td colspan="2" align="left"><strong>Quantidade: <%=rs.getString("qtdPRoduto")%></strong></td>
@@ -292,10 +296,9 @@ while(rs.next()){
  <td align="left" colspan="3" height="30"></td>
 </tr>
 <tr>
-  <td height="100" colspan="7" align="center" valign="middle"><font size="2">Obs: Qualquer alteracao no servico acima descrito, entraremos em contato para autorizacao do cliente.</font></td>
-</tr>
-<tr>  
-  <td height="100" colspan="7" align="center" valign="middle"><font size="2">Obs: Não nos responsabilizamos por possíveis erros em artes aprovadas.</font></td>
+  <td height="100" colspan="3" align="left"><font size="2">Obs: Qualquer alteracao no servico acima descrito, entraremos em contato para autorizacao do cliente.
+  <p>
+  Obs: Nao nos responsabilizamos por possíveis erros em artes aprovadas.</font></td>
 </tr>
 <tr>
 <td colspan="3" height="100"></td>
@@ -306,22 +309,27 @@ while(rs.next()){
 <tr>
 </tr>
 <tr>
-	<td>N&deg; OS </td><td><%=rs02.getString("OS") %>/<%=rs02.getString("anoServico").substring(0,4)%></td>
-	<td><%=nome%></td>
-	<td></td>
-	<td></td>
-	<td>Dimen.</td>
+<td>N&deg; OS </td><td><%=rs02.getString("OS") %>/<%=rs02.getString("anoServico").substring(0,4)%></td>
 </tr>
 <tr>
-	<td align="left">Para:</td>
-	<td align="left"><%=rs02.getString("dataPrevista") %></td>
-	<td align="left">Tel:</td>
-	<td colspan="2" align="left"> <%=cliente.telefone %></td>
-	<td><%=altura%> X <%=largura %></td>
+       	<td colspan="4"><%=nome%></td>
+        
+</tr>
+<tr>
+	<td align="left">Para:</p>
+	<%=dtPrevi  %></td>
+	<td align="left">Tel:</p>
+          <%=cliente.telefone %></td>
+        
+
+</tr>
+<tr>
+<td>Prd: <%=prd %></td>
+	<td>Dimen.</p><%=altura%> X <%=largura %></td>
 </tr>
 </table>
 
 </div>
 
 </body>
-</html>
+</html>					

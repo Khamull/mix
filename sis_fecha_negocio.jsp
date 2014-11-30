@@ -45,15 +45,16 @@
 <h6>
 <%=rs.getString("clienteNomeFantasia") %>
 <p/>
-<%if(rs01.next())%>
+<%while(rs01.next()){%>
 	Produto: <%=rs01.getString("nome") %> Dimen.: <%=rs01.getString("altura") %> X <%=rs01.getString("largura") %> Valor : R$ <%=rs01.getString("val") %>
-	
+<%} %>	
 </h6>
 <form id="form1" name="solicitar" action="sis_manager_encaminha_orcamento.jsp" method="post">
  <textarea name="razao" rows="10" cols="50"  required title="Informe Valor da Entrada e Outras Observações" placeholder="Informe Valor da Entrada e Outras Observações!"></textarea>
  <p>
  <input type="submit" value="Enviar"/>
  <input type="hidden" name="servicoID" value="<%=servicoID %>"/>
+ <input type="hidden" name="OS" value="<%=request.getParameter("OS") %>"/>
  <input type="hidden" name="reagenda" value="3"/>
  </p>
 </form>

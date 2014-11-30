@@ -22,6 +22,8 @@
 
 <jsp:useBean id="insertMateriais" class="servico.ServicoMateriais" scope="page"></jsp:useBean>
 
+<jsp:useBean id="os" class="servico.Servico" scope="page"></jsp:useBean>
+
 
 
 
@@ -37,6 +39,7 @@ Statement st07 = con.createStatement();
 Statement st08 = con.createStatement();
 Statement st09 = con.createStatement();
 Statement st10 = con.createStatement();
+Statement st11 = con.createStatement();
 %>
 
 
@@ -52,15 +55,21 @@ ResultSet rs07 = null;
 ResultSet rs08 = null;
 ResultSet rs09 = null;
 ResultSet rs10 = null;
+ResultSet rs11 = null;
 
 %>
 
 
 <%
 //Recupera rotinaId do produto Selecionado
-produtos.produtoID = Integer.parseInt(request.getParameter("produtoID"));
-rs10 = st10.executeQuery(produtos.pesquisaProdutoID());
-int rotina;
+GregorianCalendar cal = new GregorianCalendar();//verfica qual o ultimo numero de OS inserido
+rs11 = st11.executeQuery(os.ultimoServico_ano(cal.get(Calendar.YEAR)));
+if(rs11.next()){
+	
+	servico.OS = Integer.toString(rs11.getInt("OS")+1);//atribui valor para a OS da classe servico, que fará a inserção do valor.
+}
+
+String nivel = (String) session.getAttribute("nivel");
 
 
 //Recupera valores do formulário e atribui ao objeto servico
@@ -68,57 +77,79 @@ servico.cliente.clienteID 	= Integer.parseInt((String)request.getParameter("clie
 servico.empresa.empresaID	= Integer.parseInt((String)session.getAttribute("empresaID"));
 servico.descricao			= request.getParameter("descricao");
 servico.dataInicio 			= data.converteParaData(data.dataAtual());
-servico.valor				= Float.parseFloat(request.getParameter("valorTotal"));
+servico.valor				= Float.parseFloat(request.getParameter("valorTotal").replace(",","."));
 servico.usuario.usuarioID	= Integer.parseInt((String)session.getAttribute("usuarioID"));
-servico.OS 					= request.getParameter("os");
+//servico.OS 					= request.getParameter("os");
 servico.anoServico			= request.getParameter("anoServico");
 servico.dataPrevista		= request.getParameter("previcao");
 
-//Executa a Query q irá salvar o Serviço // Validação de Rotina e Caminho do Arquivo só deverá ocorrer quando for oficializado a venda
-//if(rs10.next())
-//{
-	//rotina = rs10.getInt("rotinaID");
-	//if(rotina == 0 || rotina == 1){//Segue para inserção na tabela de serviços seguindo Rotina de Trabalho 1
-		//String  caminho = request.getParameter("caminho");
-	st02.execute(servico.cadastraOrcamento((String) session.getAttribute("nivel")));//Aguarda confirmação de Orçamento Aceito
-	//}
-	//if(rotina == 2){//Segue para inserção na tabela de serviços seguindo Rotina de Trabalho 3
-	//	st02.execute(servico.cadastraServico("6"));//Segue primeiro para produção
-	//}
-//}
-
+//Executa a Query q irá salvar o Serviço
 
 
 //Para gerar um cupom pesquisa na base de dados qual foi o último serviço gerado
-rs01 = st01.executeQuery(servico.ultimoServico());
+//rs01 = st01.executeQuery(servico.ultimoServico());
 
 int servicoID = Integer.MIN_VALUE;
 
-if(rs01.next()){
-	servicoID = rs01.getInt("servicoID");
+//if(rs01.next()){
+//	servicoID = rs01.getInt("servicoID");
 
 %>
 <%//Copiado do Sis Add Produto
 
 	
 	//Recupera Arrays dos Materiais
-	String [] Materiais = request.getParameterValues("materiais[]");//Dimensões Informadas na OS
-	String  Altura    =    request.getParameter("altura");
-	String  Largura	= request.getParameter("largura");
+	String [] Produtos = request.getParameterValues("produtoID[]");//Dimensões Informadas na OS
+	String [] Altura    =    request.getParameterValues("altura[]");
+	String [] Largura	= request.getParameterValues("largura[]");
 	//String [] Quantidade= request.getParameterValues("Quantidade[]");
 	//String [] AlturaR    	= request.getParameterValues("alturaR[]");//valores Reais de consumo(com sobra)
 	//String [] LarguraR		= request.getParameterValues("larguraR[]");
-	String [] QuantidadeR	= request.getParameterValues("QuantidadeR[]");
-	String [] valorMateriais= request.getParameterValues("valorMaterial[]");
+	String [] QuantidadeR	= request.getParameterValues("qtdProduto[]");
+	String [] valorProduto = request.getParameterValues("valorProdutoTotal[]");
+	String [] caminho_ = request.getParameterValues("caminho[]");
 	
 	
-	
-	
+	for(int j = 0; j < Produtos.length; j++){
+		produtos.produtoID = Integer.parseInt(Produtos[j]);
+		rs10 = st10.executeQuery(produtos.pesquisaProdutoID());
+		int rotina;
+		
+		if(rs10.next())
+		{
+			rotina = rs10.getInt("rotinaID");
+			if(rotina == 0 || rotina == 1){
+				//Segue para inserção na tabela de serviços seguindo Rotina de Trabalho 1
+				if(rotina == 1){			
+					String  caminho = caminho_[j];
+					st02.execute(servico.cadastraServicoCaminho2Orcamento(nivel, caminho, "1"));
+				}
+				else
+				{
+					String  caminho = caminho_[j];
+					st02.execute(servico.cadastraServicoCaminhoOrçamento(nivel, caminho, "0"));
+				}
+				
+			}
+			if(rotina == 2){//Segue para inserção na tabela de serviços seguindo Rotina de Trabalho 3
+				st02.execute(servico.cadastraServico("8"));//Segue primeiro para produção
+			}
+		}
+
+		rs01 = st01.executeQuery(servico.ultimoServico());
+
+		//servicoID = 
+
+		if(rs01.next()){
+			servicoID = rs01.getInt("servicoID");
+
+
 	
 	//Recupera os valores trazidos do formulário e atribui ao objeto servicoitem
 	servicoproduto.servico.servicoID 	= servicoID;
-	servicoproduto.produtos.produtoID	= Integer.parseInt(request.getParameter("produtoID"));
-	servicoproduto.valor 				= Float.parseFloat(request.getParameter("valor"));
+	servicoproduto.produtos.produtoID	= Integer.parseInt(Produtos[j]);
+	String valor_ 				= valorProduto[j];
+	String qtdProduto			= QuantidadeR[j];
 	//servicoproduto.altura				= request.getParameter("alturaProduto");
 	//servicoproduto.largura				= request.getParameter("larguraProduto");
 	//Atribui o valor ao objeto servico
@@ -126,12 +157,18 @@ if(rs01.next()){
 	
 	
 	//Insere o produto na base de dados
-	st.execute(servicoproduto.salvaProduto(Altura,Largura));
+	st.execute(servicoproduto.salvaProduto(Altura[j],Largura[j], qtdProduto, valor_));
 	
 	//-------------------> Continuar Daqui!
 	//Pesquisa o estoque TOTAL atual dos materias
 	//produto.produtoID = servicoproduto.produtos.produtoID; Aqui devemos alterar para assumir os valores da tebala de materias, que é a antiga tabela de Produto
  	
+	//Recuepra Dados dos Materiais
+	String [] Materiais = request.getParameterValues("materiais"+j+"[]");
+	String [] qtdMAterial = request.getParameterValues("QuantidadeR"+j+"[]");
+	String [] valorMateriais = request.getParameterValues("valorMaterial"+j+"[]");
+	
+	
 	for(int i = 0; i< Materiais.length; i++){
 		
 		
@@ -139,10 +176,10 @@ if(rs01.next()){
 		produto.produtoID = Integer.parseInt(Materiais[i]);
 		rs04 = st04.executeQuery(produto.listaProdutosIDNova());//Aqui termina a parte de inserção de dados do produto, seguimos para iteração por material
 	
-	//	float estoqueTotalAtual = 0;
+		float estoqueTotalAtual = 0;
 	
 	if(rs04.next()){
-	//	estoqueTotalAtual = rs04.getFloat("estoque");
+		estoqueTotalAtual = rs04.getFloat("estoque");
 		insertMateriais.valorCusto	 	= rs04.getFloat("precoCusto");
 	}
 	
@@ -156,59 +193,56 @@ if(rs01.next()){
 	//insertMateriais.Quantidade		  	= Quantidade[i];
 	//insertMateriais.alturaR 	      	= AlturaR[i];
 	//insertMateriais.larguraR 			= LarguraR[i];
-	insertMateriais.QuantidadeR 		= QuantidadeR[i];
+	insertMateriais.QuantidadeR 		= qtdMAterial[i];
 	
 	//Insere de fato na tabela servicoMateriais
 	st07.execute(insertMateriais.insereMaterial());
 		//Atualiza o estoque total
-		//produto.estoque = (estoqueTotalAtual - Float.parseFloat(QuantidadeR[i]));
-		//st.execute(produto.alteraEstoqueProduto());
+		produto.estoque = (estoqueTotalAtual - Float.parseFloat(QuantidadeR[i]));
+		st.execute(produto.alteraEstoqueProduto());
 		
 	
 	//pesquisa o estoque POR LOJA desse produto
-	//produtoestoque.produto.produtoID = produto.produtoID;
-	//produtoestoque.empresa.empresaID = Integer.parseInt((String)session.getAttribute("empresaID"));
-	//rs05 = st05.executeQuery(produtoestoque.pesquisaEstoque());
+	produtoestoque.produto.produtoID = produto.produtoID;
+	produtoestoque.empresa.empresaID = Integer.parseInt((String)session.getAttribute("empresaID"));
+	rs05 = st05.executeQuery(produtoestoque.pesquisaEstoque());
 	
-	//float estoqueAtual = 0;
+	float estoqueAtual = 0;
 	
-//	if(rs05.next()){
-		//estoqueAtual = rs05.getFloat("quantidade");
-	//}
+		if(rs05.next()){
+			estoqueAtual = rs05.getFloat("quantidade");
+		}
 	
 		//Atualiza o estoque por loja
-		//produtoestoque.quantidade = (estoqueAtual - Float.parseFloat(QuantidadeR[i]));
-		//st.execute(produtoestoque.alteraEstoque());
+		produtoestoque.quantidade = (estoqueAtual - Float.parseFloat(QuantidadeR[i]));
+		st.execute(produtoestoque.alteraEstoque());
 	}
 	
 	//Pesquisa o valor total atual desse serviço
 		rs01 = st01.executeQuery(servico.pesquisaServico());
 		
 		float valorAtual = 0;
-		
-		
+
 		if(rs01.next()){
 			valorAtual = rs01.getFloat("valor");
 		}
 		
 		//Soma ao novo valor vindo do formulário
 		servico.valor = (valorAtual + servicoproduto.valor);
-		
 		//Altera o valor total do servico
 		st.execute(servico.atualizaValorServico());
-		
-		
 		//Muda o Status de visualizado para (Não-Visualizado)
 		//st.execute(servico.naoVisualizado());
-	
-	//Após alterado fecha a página e atualiza a página de pai
+		//Após alterado fecha a página e atualiza a página de pai
+
+	}
 }
 %>
 
 
 <%
 //Direciona para a impressão de um cupom para o cliente
-response.sendRedirect("sis_print_cupom_servico_cliente.jsp?servicoID="+servicoID);
+response.sendRedirect("sis_print_cupom_servico_cliente.jsp?servicoID="+servicoID+"&OS="+servico.OS+"&Ano="+servico.anoServico);
 //response.sendRedirect("sis_update_os.jsp?servicoID="+servicoID);
 %>
 

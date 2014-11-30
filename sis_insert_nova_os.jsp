@@ -19,6 +19,7 @@
 <jsp:useBean id="produtos" class="cadastro.Produtos" scope="page"></jsp:useBean><!--Para Seleção de Produtos que compoem a OS -->
 
 <jsp:useBean id="materiais" class="cadastro.Produto" scope="page"></jsp:useBean><!--Para Seleção de materiais que compoem os produtos -->
+
 <jsp:useBean id="os" class="servico.Servico" scope="page"></jsp:useBean>
 
 <jsp:useBean id="caixa" class="caixaloja.Caixa" scope="page"></jsp:useBean>
@@ -691,10 +692,10 @@ function verPonto_Calculo(val){
   	<td align="left" colspan="3"><strong>OS anterior: <%=rs02.getString("OS")+"/"+rs02.getString("anoServico").substring(0,4)%></strong></td>
   	</TR>
   	<tr>
-	 <td align="left">N&deg; O.S.</td>
+	 <td align="left"><!-- N&deg; O.S.--></td>
 	 
 	<td align="left">
-		<input type="number" min="0" value="<%=OSNova%>" name="os" style="width:50px" required="required" align="left"/><strong><%="/"+cal.get(Calendar.YEAR) %></strong>
+		<!-- input type="number" min="0" value="<%=OSNova%>" name="os" style="width:50px" required="required" align="left"/><strong><%="/"+cal.get(Calendar.YEAR) %></strong-->
 	</td>
 	<%}
 	 else

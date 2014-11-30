@@ -22,6 +22,8 @@
 
 <jsp:useBean id="insertMateriais" class="servico.ServicoMateriais" scope="page"></jsp:useBean>
 
+<jsp:useBean id="os" class="servico.Servico" scope="page"></jsp:useBean>
+
 
 
 
@@ -37,6 +39,7 @@ Statement st07 = con.createStatement();
 Statement st08 = con.createStatement();
 Statement st09 = con.createStatement();
 Statement st10 = con.createStatement();
+Statement st11 = con.createStatement();
 %>
 
 
@@ -52,15 +55,18 @@ ResultSet rs07 = null;
 ResultSet rs08 = null;
 ResultSet rs09 = null;
 ResultSet rs10 = null;
-
+ResultSet rs11 = null;
 %>
 
 
 <%
 //Recupera rotinaId do produto Selecionado
-
-
-
+GregorianCalendar cal = new GregorianCalendar();//verfica qual o ultimo numero de OS inserido
+rs11 = st11.executeQuery(os.ultimoServico_ano(cal.get(Calendar.YEAR)));
+if(rs11.next()){
+	
+	servico.OS = Integer.toString(rs11.getInt("OS")+1);//atribui valor para a OS da classe servico, que fará a inserção do valor.
+}
 
 //Recupera valores do formulário e atribui ao objeto servico
 servico.cliente.clienteID 	= Integer.parseInt((String)request.getParameter("clienteID").trim());
@@ -69,9 +75,12 @@ servico.descricao			= request.getParameter("descricao");
 servico.dataInicio 			= data.converteParaData(data.dataAtual());
 servico.valor				= Float.parseFloat(request.getParameter("valorTotal").replace(",","."));
 servico.usuario.usuarioID	= Integer.parseInt((String)session.getAttribute("usuarioID"));
-servico.OS 					= request.getParameter("os");
+//servico.OS 					= request.getParameter("os");
 servico.anoServico			= request.getParameter("anoServico");
 servico.dataPrevista		= request.getParameter("previcao");
+
+
+
 
 //Executa a Query q irá salvar o Serviço
 

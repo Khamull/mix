@@ -251,6 +251,36 @@ public class Datas {
 		
 	}
 	
+	public String verificaDataVencimento2(String dataSimples) {
+		
+		//Quebra a Data e tres parte ( dia , mes e ano)
+		String[] a = new String[3];
+		a = dataSimples.split("-");
+		
+		//Recupera a data de hoje
+		int dia = Integer.parseInt(diaAtual());
+		int mes = Integer.parseInt(mesAtual());
+		int ano = Integer.parseInt(anoAtual());
+		
+		
+		//Recupera a data passada
+		int diaP = Integer.parseInt(a[2]);
+		int mesP = Integer.parseInt(a[1]);
+		int anoP = Integer.parseInt(a[0]);
+		
+		//Verifica se o a Data é igual a de hoje
+		if(anoP == ano && mesP == mes && diaP == dia){
+			return "igual";
+		}else if(anoP <= ano && mesP <= mes && diaP < dia){
+			return "menor";
+		}else if(anoP <= ano && mesP < mes){
+			return "menor";
+		}else {
+			return "maior";
+		}
+		
+	}
+	
 	
 	
 	//Esse Método forma uma Data usando as informações passadas por parametro

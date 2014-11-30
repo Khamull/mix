@@ -8,12 +8,13 @@
 <jsp:useBean id="servico" class="servico.Servico" scope="page"></jsp:useBean>
 
 <%
+String nivel = (String) session.getAttribute("nivel"); 
 Statement st01 = con.createStatement();
 Statement st02 = con.createStatement();
 	String razao = request.getParameter("razao");
-	st01.execute(servico.encaminhaOrcamento(2, "ORCAMENTO ACEITO", Integer.parseInt(request.getParameter("servicoID")), razao));
+	st01.execute(servico.encaminhaOrcamento(2, "ORCAMENTO ACEITO", request.getParameter("OS"), razao));
 	String idusuario = (String) session.getAttribute("usuarioID");
-	st02.execute(servico.atualizaHistoricoSolReagenda("6", request.getParameter("servicoID"), idusuario, "ORCAMENTO ACEITO", razao));//Matem Hustórico de todas as mudanças
+	st02.execute(servico.atualizaHistoricoSolReagenda(nivel, request.getParameter("servicoID"), idusuario, "ORCAMENTO ACEITO", razao));//Matem Hustórico de todas as mudanças
 %>
 <script type="text/javascript">
  window.close();  

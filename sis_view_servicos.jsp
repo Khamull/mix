@@ -68,7 +68,8 @@ else
 		}
 		else{
 			if(request.getParameter("BUSCAR") == null){
-				if(!session.getAttribute("nivel").equals("7")){	
+				if(!session.getAttribute("nivel").equals("7"))
+				{	
 					if(session.getAttribute("nivel").equals("8"))
 					{
 						rs = st.executeQuery(servico.listaServicosPendentesPorCamadaRotina2((String) session.getAttribute("nivel")));
@@ -146,14 +147,14 @@ function fase(passo)
 }
 
 //Encerra por fim a OS
-function confirmaFinalizacao(servicoID, nivelUsuario){
+function confirmaFinalizacao(servicoID, nivelUsuario, OS){
 	
 //		var caminho = document.getElementById("caminho");
 	if(nivelUsuario == "7")
 	{
 		if(confirm("Encaminhar Nova OS?"))
 		{
-			window.open("sis_fecha_negocio.jsp?servicoID="+servicoID+"&nivelUsuario="+nivelUsuario, "Nova OS", "width=480px, height=300px");
+			window.open("sis_fecha_negocio.jsp?servicoID="+servicoID+"&nivelUsuario="+nivelUsuario+"&OS="+OS, "Nova OS", "width=480px, height=300px");
 		}
 	}
 	else
@@ -216,6 +217,14 @@ function agenda(servicoID, OS, ano, nivelUsuario)
 	if(confirm("Agendar?"))
 	{
 		window.open("sis_agenda.jsp?servicoID="+servicoID+"&OS="+OS+"&ano="+ano+"&nivelUsuario="+nivelUsuario, "Agendar", "width=480px, height=300px");
+	}
+}
+
+function excluir(OS, ANO)
+{
+	if(confirm("Deseja Realmente escluir a OS: "+OS+"/"+ANO))
+	{
+		window.location.href = "sis_permitir_exclusao_os.jsp?OS="+OS+"&ANO="+ANO;
 	}
 }
 </script>
@@ -299,9 +308,10 @@ function agenda(servicoID, OS, ano, nivelUsuario)
 	   	   break;
 	   case 7:
 		   out.println("<tr><td colspan=\"8\" align=\"center\"><strong>ORDENS DE SERVI&Ccedil;O PARA OR&Ccedil;AMENTO</strong></td></tr>");
+		   break;
 	   case 8:
 		   out.println("<tr><td colspan=\"8\" align=\"center\"><strong>ORDENS DE SERVI&Ccedil;O PARA PRODU&Ccedil;&Atilde;O</strong></td></tr>");
-	   break;
+	   		break;
 	   default:
 		   out.println("<tr><td colspan=\"8\" align=\"center\"><strong>LISTA DE ORDENS DE SERVI&Ccedil;O EM ABERTO</strong></td></tr>");    
   }%>
@@ -334,11 +344,12 @@ function agenda(servicoID, OS, ano, nivelUsuario)
     </td>
    </tr>
 <td colspan="20">
-<table id="tb1" width="1000" align="center" cellpadding="0" cellspacing="0">  
+<table id="tb1" width="1200" align="center" cellpadding="0" cellspacing="0">  
  <tr>
   <td colspan="20" height="5"></td>
  </tr> 
  <tr bgcolor="#EEEEEE">
+ 	<td></td>
     <td   align="left"><strong>N&deg; O.S.</strong></td>
     <td   align="left"><strong>Cliente</strong></td>
     <td  align="left"><strong>Data Inicio</strong></td>
@@ -375,6 +386,7 @@ while (rs.next()){
 %>
    
    <tr>
+    <td><%if (nivel_.equals("1") || nivel_.equals("2")){ %><img src="images/delete.png" width="15" height="15" title="Excluir OS: <%=rs.getString("OS")+"/"+rs.getString("anoServico").substring(0,4) %>" onclick="excluir(<%=rs.getString("OS")%>, <%=rs.getString("anoServico").substring(0,4)%>)"/><%} %></td>
     <td height="30"   align="left"><%=rs.getString("OS")+"/"+rs.getString("anoServico").substring(0,4) %></td>
     <td height="30"  align="left"><%=rs.getString("clienteNomeFantasia") %></td>
     <td height="30"  align="left"><%=data.converteDeData(rs.getString("dataInicio")) %></td>
@@ -448,9 +460,9 @@ while (rs.next()){
     		visu = "S";
     	}
     	if(visu.equals("S")){%>
-    		<a href="javascript: confirmaFinalizacao(<%=rs.getString("servicoID")%>, <%=nivel_ %>)" onclick="fase(<%=rs.getString("passo")%>)"><img src="ico/ico_cofirmar.gif" width="20" height="20" border="0" title="Clique aqui para confirmar Finalizacao"/></a>
+    		<a href="javascript: confirmaFinalizacao(<%=rs.getString("servicoID")%>, <%=nivel_ %>, <%=rs.getString("OS") %>)" onclick="fase(<%=rs.getString("passo")%>)"><img src="ico/ico_cofirmar.gif" width="20" height="20" border="0" title="Clique aqui para confirmar Finalizacao"/></a>
     	<%} else { %>
-    <a href="javascript: naoConfirmado()" ><img src="ico/ico_cofirmar.gif" width="20" height="20" border="0" title="Clique aqui para confirmar Finalizacao"></a>
+    		<a href="javascript: naoConfirmado()" ><img src="ico/ico_cofirmar.gif" width="20" height="20" border="0" title="Clique aqui para confirmar Finalizacao"></a>
     <% }
     }else{ %>
     	<img src="ico/ico_joinha.png" width="20" height="20" border="0" title="Ok, Ordem de serviço finalizada!" >

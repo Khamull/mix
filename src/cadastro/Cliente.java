@@ -23,7 +23,7 @@ public class Cliente {
 
 	//Pesquisa todos os Clientes cadastrados
 	public String listaClientes(){
-		return "SELECT * FROM cliente ORDER BY clienteID DESC";
+		return "SELECT * FROM cliente ORDER BY clienteNomeFantasia ASC";
 	}
 	
 	//Pesquisa todos os Clientes cadastrados Ativos

@@ -169,7 +169,7 @@ function caminho(servicoID, obj){
  <%if(rs.next()){ 	%>
  <table width="696" align="center" cellpadding="2" cellspacing="2">
   <tr bgcolor="#EEEEEE">
-   <td colspan="4" align="center"><strong>EDITAR ORDEM DE SERVI&Ccedil;O</strong></td>
+   <td colspan="6" align="center"><strong>EDITAR ORDEM DE SERVI&Ccedil;O</strong></td>
   </tr>
   <tr>
   	<form id="form1" action="<%=id%>" method="post">
@@ -193,7 +193,7 @@ function caminho(servicoID, obj){
     Tel: <%=rs.getString("clienteTelefone") %> &nbsp;&nbsp;&nbsp;
     Cel: <%=rs.getString("clienteCelular") %> <%=rs.getString("operadoraCelular") %>
     </td>
-    <TD></TD>
+    <TD coslpan="2"><%=rs.getString("clienteEmail") %></TD>
     </tr>
   <tr bgcolor="#F9F6F2">
     <td align="left">VALOR TOTAL</td>
@@ -207,14 +207,14 @@ function caminho(servicoID, obj){
 -moz-background-size: 15% 100%;" value="" title="Pagamentos" /><%} %></td>
     </tr>
   <tr bgcolor="#FFFF99">
-   <td colspan="4" align="center">Descri&ccedil;&atilde;o do Servi&ccedil;o&nbsp;<a href="sis_update_descricao_servico.jsp?servicoID=<%=rs.getString("servicoID")%>" style="font-size:10px" title="Editar Descriçao do Serviço">[editar]</a></td>
+   <td colspan="6" align="center">Descri&ccedil;&atilde;o do Servi&ccedil;o&nbsp;<a href="sis_update_descricao_servico.jsp?servicoID=<%=rs.getString("servicoID")%>" style="font-size:10px" title="Editar Descriçao do Serviço">[editar]</a></td>
    </tr>
   <tr>
-   <td colspan="4" align="center">
+   <td colspan="6" align="center">
     <pre style="white-space:pre-line; width:696px; text-align:left"><%=rs.getString("descricao")%></pre>   </td>
   </tr>
   <tr>
-    <td colspan="4" align="center"><hr color="#FFFF99" /></td>
+    <td colspan="6" align="center"><hr color="#FFFF99" /></td>
   </tr>
   <!-- <tr valign="middle">
     <td colspan="4" align="center" bgcolor="#52658C"><font color="#FFFFFF">Adicionar Servi&ccedil;o&nbsp;</font><a href="javascript: addServico(<%=rs.getString("servicoID")%>)" ><img src="ico/ico_add.png" width="18" height="18" border="0" title="+ Adicionar Serviço" align="absmiddle" /></a></td>
@@ -243,10 +243,10 @@ function caminho(servicoID, obj){
     <td align="left">&nbsp;</td>
   </tr>-->
   <tr align="center" valign="middle" bgcolor="#52658C">
-    <td colspan="4"><font color="#FFFFFF">Produto&nbsp;</font><!-- a href="javascript: addProduto(<%=rs.getString("servicoID")%>)" ><img src="ico/ico_add.png" width="18" height="18" border="0" align="absmiddle" title="+ Adicionar Produto" /></a--></td>
+    <td colspan="6"><font color="#FFFFFF">Produto&nbsp;</font><!-- a href="javascript: addProduto(<%=rs.getString("servicoID")%>)" ><img src="ico/ico_add.png" width="18" height="18" border="0" align="absmiddle" title="+ Adicionar Produto" /></a--></td>
     </tr>
   <tr>
-    <td colspan="4" align="center">
+    <td colspan="6" align="center">
     
       
         <%int i = 0;

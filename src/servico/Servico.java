@@ -47,6 +47,29 @@ public class Servico {
 		return pesquisaEmp;
 	}
 	
+	
+	public String pesquisaServicoPorOS() {
+		String pesquisaEmp = "SELECT cliente.*, servico.*, ";
+		pesquisaEmp += " case servico.dataprevista ";
+		pesquisaEmp += " when '0000-00-00' then \"0\"";
+		pesquisaEmp += " else servico.dataprevista";
+		pesquisaEmp += " end as dataprevista1, ";
+		pesquisaEmp += " case servico.dataAgendamento ";
+		pesquisaEmp += " when '0000-00-00' then \"0\"";
+		pesquisaEmp += " else servico.dataAgendamento";
+		pesquisaEmp += " end as dataAgendamento1 ";
+		pesquisaEmp += " from servico INNER JOIN cliente ON cliente.clienteID = servico.clienteID ";
+		pesquisaEmp += " where servico.OS = '"+OS+"'";
+		pesquisaEmp += " and servico.anoServico = '"+anoServico+"'";
+		
+		return pesquisaEmp;
+	}
+	
+	public String DeleteOS(String IN) {
+		String pesquisaEmp = "delete from servico where `servicoID` in ("+IN+")";
+		return pesquisaEmp;
+	}
+	
 	//Pesquisa informações sobre um determinado Serviço por ID e por Empresa
 	public String pesquisaServicoEmpresa() {
 		String pesquisaEmp = "SELECT cliente.clienteID, cliente.clienteNomeFantasia, servico.* ";
@@ -59,6 +82,86 @@ public class Servico {
 	//Pesquisa todos os Serviços
 	public String listaServicos() {
 		return "SELECT * FROM servico ORDER BY servicoID DESC";
+	}
+	
+	public String listaServicosRelatorios(String dtInic, String dtFim, String depart, int St, Boolean prazo) {
+		String listaServ=""; 
+		listaServ += " select distinct servico.OS,	";
+		listaServ += " servico.anoServico,			";
+		listaServ += " servico.servicoID, 			";
+		listaServ += " servico.dataInicio, 			";
+		listaServ += " servico.dataprevista, 		";
+		listaServ += " servico.dataAgendamento, 	";
+		listaServ += " servico.dataFim, 			";
+		listaServ += " servico.dataprevista, 		";
+		listaServ += " servico.valor, 				";
+		listaServ += " servico.entrada,				";
+		listaServ += " servico.valor, 				";
+		listaServ += " servico.vezes, 				";
+		listaServ += " servico.status, 				";
+		listaServ += " servico.passo, 				";
+		listaServ += " servico.nivelUsuario,		";
+		listaServ += " cliente.clienteNomeFantasia 	";
+		listaServ += " from servico inner join cliente on cliente.clienteID = servico.clienteID";
+		if(!dtInic.equals("") && !dtFim.equals(""))//Somente datas foram informadas
+		{
+			listaServ += " where servico.dataInicio between '"+dtInic+"' and '"+dtFim+"'";
+			if(!depart.equals("") && !depart.equals("-1"))//Datas selecionadas e com departamento específico
+			{
+				listaServ += " and servico.nivelUsuario = '"+depart+"' ";
+			}
+			if(St == 1){//Datas selecionadas e com um status específico
+				listaServ += "and servico.status = 'M' ";
+			}
+			if(St == 2)
+			{
+				listaServ += " and servico.status = 'F' ";
+			}
+			if(prazo){// Para que esteja fora do prazo, o select tem que retornar os servico que estejam data fim maior que data prevista
+				//listaServ += " and servico.dataprevista < curdate() ";
+				listaServ += " and servico.dataprevista < servico.dataFim ";
+			}
+		}
+		if(!dtInic.equals("") && dtFim.equals(""))//Procura somente por uma data específica
+		{
+			listaServ += " where servico.dataInicio = '"+dtInic+"' ";
+			if(!depart.equals("") && !depart.equals("-1"))//Datas selecionadas e com departamento específico
+			{
+				listaServ += " and servico.nivelUsuario = '"+depart+"' ";
+			}
+			if(St == 1){//Datas selecionadas e com um status específico
+				listaServ += "and servico.status = 'M' ";
+			}
+			if(St == 2)
+			{
+				listaServ += " and servico.status = 'F' ";
+			}
+			if(prazo){// Para que esteja fora do prazo, o select tem que retornar os servico que estejam data fim maior que data prevista
+				//listaServ += " and servico.dataprevista < curdate() ";
+				listaServ += " and servico.dataprevista < servico.dataFim ";
+			}
+		}
+		if(dtInic.equals("") && dtFim.equals("") && St!=2 && St != 1 && !prazo && !depart.equals("") && !depart.equals("-1"))//Somente o departamento atual foi consultado
+		{
+			listaServ += " where servico.nivelUsuario = '"+depart+"' ";
+		}
+		if(dtInic.equals("") && dtFim.equals("") && St != 0 &&  !prazo && depart.equals("") || depart.equals("-1"))//somente a cusulta por status foi usada
+		{
+			if(St == 1)
+			{
+				listaServ += " where servico.status = 'M' ";
+			}
+			if(St == 2)
+			{
+				listaServ += " where servico.status = 'F' ";
+			}
+		}
+		if(prazo && dtInic.equals("") && dtFim.equals("") && St == 0 && depart.equals("-1"))//Somente a consulta por 
+		{
+			listaServ += " where servico.dataprevista < servico.dataFim ";
+		}
+		
+		return listaServ;
 	}
 	
 	//Pesquisa todos os Serviços Não-Finalizados Por Empresa
@@ -326,13 +429,42 @@ public class Servico {
 		
 		return salvaServ;
 	}
+	public String cadastraServicoCaminhoOrçamento(String nivelUsuario, String caminho, String Rotina) {
+		String cam = caminho.replace("\\", "\\");
+		String salvaServ = "INSERT INTO servico ";
+		salvaServ += "(OS, anoServico, clienteID, empresaID, descricao, dataInicio, dataprevista, valor, usuario, nivelUsuario, caminhoArte, passo, tipo,rotina) ";
+		salvaServ += "VALUES ";
+		salvaServ += "('"+OS+"', '"+anoServico+"', '"+cliente.clienteID+"', '"+empresa.empresaID+"', '"+descricao+"', '"+dataInicio+"','"+ dataPrevista +"','"+valor+"', '"+usuario.usuarioID+"','"+nivelUsuario+"','"+cam+"','ORÇAMENTO','1','"+Rotina+"')";
+		
+		return salvaServ;
+	}
+	
+	public String cadastraServicoCaminhoOrçamento3(String nivelUsuario,  String Rotina) {//Cadastro de Orçamentos Rotina 3
+		//String cam = caminho.replace("\\", "\\");
+		String salvaServ = "INSERT INTO servico ";
+		salvaServ += "(OS, anoServico, clienteID, empresaID, descricao, dataInicio, dataprevista, valor, usuario, nivelUsuario, passo, tipo,rotina) ";
+		salvaServ += "VALUES ";
+		salvaServ += "('"+OS+"', '"+anoServico+"', '"+cliente.clienteID+"', '"+empresa.empresaID+"', '"+descricao+"', '"+dataInicio+"','"+ dataPrevista +"','"+valor+"', '"+usuario.usuarioID+"','"+nivelUsuario+"','ORÇAMENTO','1','"+Rotina+"')";
+		
+		return salvaServ;
+	}
 	
 	public String cadastraServicoCaminho2(String nivelUsuario, String caminho, String Rotina) {
 		String cam = caminho.replace("\\", "\\");
 		String salvaServ = "INSERT INTO servico ";
-		salvaServ += "(OS, anoServico, clienteID, empresaID, descricao, dataInicio, dataprevista, valor, usuario, nivelUsuario, caminhoArte, passo ,rotina) ";
+		salvaServ += "(OS, anoServico, clienteID, empresaID, descricao, dataInicio, dataprevista, valor, usuario, nivelUsuario, caminhoArte, passo, rotina) ";
 		salvaServ += "VALUES ";
 		salvaServ += "('"+OS+"', '"+anoServico+"', '"+cliente.clienteID+"', '"+empresa.empresaID+"', '"+descricao+"', '"+dataInicio+"','"+ dataPrevista +"','"+valor+"', '"+usuario.usuarioID+"','"+nivelUsuario+"','"+cam+"','PRD/NOVO','"+Rotina+"')";
+		
+		return salvaServ;
+	}
+	
+	public String cadastraServicoCaminho2Orcamento(String nivelUsuario, String caminho, String Rotina) {//Cadastra Orçamentos Para a Rotina de Trabalho 2 
+		String cam = caminho.replace("\\", "\\");
+		String salvaServ = "INSERT INTO servico ";
+		salvaServ += "(OS, anoServico, clienteID, empresaID, descricao, dataInicio, dataprevista, valor, usuario, nivelUsuario, caminhoArte, passo, tipo,rotina) ";
+		salvaServ += "VALUES ";
+		salvaServ += "('"+OS+"', '"+anoServico+"', '"+cliente.clienteID+"', '"+empresa.empresaID+"', '"+descricao+"', '"+dataInicio+"','"+ dataPrevista +"','"+valor+"', '"+usuario.usuarioID+"','"+nivelUsuario+"','"+cam+"','ORÇAMENTO','1','"+Rotina+"')";
 		
 		return salvaServ;
 	}
@@ -444,8 +576,8 @@ public class Servico {
 		return update;
 	}
 	
-	public String encaminhaOrcamento(int nivelUsuario, String passo, int sID, String razao) {
-		String update = "UPDATE servico SET visualizacao = 'N', nivelUsuario = '"+nivelUsuario+"', passo = '"+ passo +"', obsOrcamento ='"+razao +"'  WHERE servicoID = '"+ sID +"'";
+	public String encaminhaOrcamento(int nivelUsuario, String passo, String OS, String razao) {
+		String update = "UPDATE servico SET visualizacao = 'N', nivelUsuario = '"+nivelUsuario+"', passo = '"+ passo +"', obsOrcamento ='"+razao +"'  WHERE OS = '"+ OS +"'";
 		return update;
 	}
 	
@@ -536,7 +668,7 @@ public class Servico {
 			return "Serviço Atualizado com Sucesso!";
 			
 		case 3:
-			return "Serviço Excluido com Sucesso!";
+			return "OS Excluido com Sucesso!";
 			
 		case 4:
 			return "Confirmado a Visualização";
