@@ -145,15 +145,17 @@ public class Servico {
 		{
 			listaServ += " where servico.nivelUsuario = '"+depart+"' ";
 		}
-		if(dtInic.equals("") && dtFim.equals("") && St != 0 &&  !prazo && depart.equals("") || depart.equals("-1"))//somente a cusulta por status foi usada
+		if(St != 0 && depart.equals("-1"))//somente a cusulta por status foi usada
 		{
-			if(St == 1)
-			{
-				listaServ += " where servico.status = 'M' ";
-			}
-			if(St == 2)
-			{
-				listaServ += " where servico.status = 'F' ";
+			if(dtInic.equals("") && dtFim.equals("")){
+				if(St == 1)
+				{
+					listaServ += " where servico.status = 'M' ";
+				}
+				if(St == 2)
+				{
+					listaServ += " where servico.status = 'F' ";
+				}
 			}
 		}
 		if(prazo && dtInic.equals("") && dtFim.equals("") && St == 0 && depart.equals("-1"))//Somente a consulta por 

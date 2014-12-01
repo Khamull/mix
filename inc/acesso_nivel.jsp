@@ -116,7 +116,7 @@ if(urlCaminho.equals("sis_conta_receber.jsp") && nivelUsuario.equals("2")){
 }
 
 //Bloqueia a Visualização das Contas à Receber
-if(urlCaminho.equals("sis_conta_receber_separada.jsp") && nivelUsuario.equals("2")){
+if(urlCaminho.equals("sis_conta_receber_separada.jsp") && nivelUsuario.equals("3")){
 	response.sendRedirect("sis_menu.jsp?msg=2");
 }
 

@@ -103,14 +103,14 @@ function verForm(){
   <tr>
    <td align="left"><a href="#" onclick="javascript: window.open('relatorios/rep_clientes_relacao.jsp', 'Fornecedores', 'width = 800; height = 600; scrollbars=yes')">&gt; Clientes</a></td>
    <td align="left"><a href="relatorios/select_produtos.jsp">&gt; Produtos</a></td>
-   <td align="left"><a href="relatorios/select_vendas.jsp">&gt; Vendas</a></td>
+   <td align="left"><a href="#"onclick="javascript: window.open('relatorios/rep_ordensdeservio.jsp', 'OS', 'width = 1056; height =1024; scrollbars=yes')">&gt; Vendas</a></td>
    <td align="left"><a href="relatorios/select_livro_caixa.jsp">&gt; Livro Caixa</a></td>
   </tr>
   <tr>
     <td align="left"><a href="#" onclick="javascript: window.open('relatorios/rep_fornecedores_relacao.jsp', 'Fornecedores', 'width = 800; height = 600; scrollbars=yes')">&gt; Fornecedores</a></td>
     <td align="left"><a href="relatorios/select_produtos_sempreco.jsp">&nbsp;&nbsp;&nbsp;- Produtos (sem preco)</a></td>
     <td align="left"><a href="#" onclick="javascript: window.open('relatorios/rep_quantidade_produto.jsp', 'Fornecedores', 'width = 800; height = 600; scrollbars=yes')">&gt; Qtd Produto em Estoque</a></td>
-    <td align="left"><a href="#" onclick="javascript: window.open('relatorios/rep_ordensdeservio.jsp', 'OS', 'width = 1056; height =1024; scrollbars=yes')">&gt; Relatório de OS's</a></td>
+    <td align="left"></td>
   </tr>
   <tr>
     <td align="left">&nbsp;</td>

@@ -45,16 +45,22 @@ if(request.getParameter("st") != null)
 if(request.getParameter("dataInic")!=null)
 {
 	dtInic = request.getParameter("dataInic");
-	if(dtInic.substring(2,3).equals("/")){
-		dtInic = data.converteParaData(dtInic);
+	if(!dtInic.equals(""))
+	{
+		if(dtInic.substring(2,3).equals("/")){
+			dtInic = data.converteParaData(dtInic);
+		}
 	}
 }
 if(request.getParameter("dataFim")!=null){
 	
 	dtFim = request.getParameter("dataFim");
-	if(dtFim.substring(2,3).equals("/"))
+	if(!dtFim.equals(""))
 	{
-		dtFim = data.converteParaData(dtFim);
+		if(dtFim.substring(2,3).equals("/"))
+		{
+			dtFim = data.converteParaData(dtFim);
+		}
 	}
 }
 if(request.getParameter("depart") != null){
