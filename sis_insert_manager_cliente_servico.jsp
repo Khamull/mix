@@ -47,14 +47,14 @@ if(cliente.cnpj.equals("")){
 //Verifica se já existe um usuário com esse Nome
 rs = st.executeQuery(cliente.verificaCnpj());
 
-if(rs.next()){
+//if(rs.next()){
 	//Caso exista um Cliente com esse CPF / CNPJ, retorna para a Página de Cadastro
-	response.sendRedirect("sis_insert_cliente.jsp?msg=4");
-}else{
+	//response.sendRedirect("sis_insert_cliente.jsp?msg=4");
+//}else{
 	//Senão: Executa a Função que irá salvar os dados na Base de Dados
 	st.execute(cliente.salvarCliente());
-	response.sendRedirect("sis_insert_nova_os.jsp");
-}
+	response.sendRedirect("sis_insert_novo_orcamento.jsp?orcamento=1");
+//}
 %>
 
 <%

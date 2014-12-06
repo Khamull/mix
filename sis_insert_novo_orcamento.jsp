@@ -782,11 +782,11 @@ function verPonto_Calculo(val){
 					</td>
 					<td>
 						Altura
-						 <INPUT type="number" step="0.01" name="altura[]" min="0" value="0" style="width:75px; text-align: right;"/>
+						 <INPUT type="number" step="0.01" name="altura[]" min="0" value="" style="width:75px; text-align: right;"/>
 					</td>
 					<td>
 						Largura
-						 <INPUT type="number" name="largura[]" min="0" step="0.01" value="0" size="5" style="width:75px; text-align: right;"/>
+						 <INPUT type="number" name="largura[]" min="0" step="0.01" value="" size="5" style="width:75px; text-align: right;"/>
 					</td>
 					<td>
 					Quantidade
@@ -794,7 +794,7 @@ function verPonto_Calculo(val){
 					</td>
 					<td>
 					Valor Produto
-						 <input name="valorProdutoTotal[]" type="text"  value="0.00" size="20" maxlength="10" onkeypress="verPonto(); return numero(this.value)" required="required" style="text-align: right;"/>
+						 <input name="valorProdutoTotal[]" type="text"  value="" size="20" maxlength="10" onkeypress="verPonto(); return numero(this.value)" required="required" style="text-align: right;"/>
 					</td>
 					<td  id="caminho1">
 						Arte: 
@@ -819,13 +819,13 @@ function verPonto_Calculo(val){
 													Quantidade
 												</td>
 												<td>
-													 <td><INPUT type="number" name="QuantidadeR0[]" min="0" size="5" step="0.01" value="0" required style="width:75px; text-align: right;"/></td>
+													 <td><INPUT type="number" name="QuantidadeR0[]" min="0" size="5" step="0.01" value="" required style="width:75px; text-align: right;" required="required"/></td>
 												</td>
 												<td>
 													Valor
 												</td>
 												<td> 
-													<input type="number" pattern="(\d{3})([\.])(\d{2})" name="valorMaterial0[]" size="5" required style="width:75px; text-align: right;" value="0.00" step="0.01" min="0" maxlength="10" onchange="setTwoNumberDecimal(this);somavalor(this);verPonto();return numero(this.value)" required="required"/>
+													<input type="number"  name="valorMaterial0[]" size="5" required style="width:75px; text-align: right;" value="" step="0.01" min="0" maxlength="10" onkeypress="verPonto(); return numero(this.value)" required="required"/>
 												</td>    
 												<td></td>
 												<td></td>

@@ -1,6 +1,8 @@
 <%@ page import="java.sql.*" %>
 <%@ include file="../inc/conexao.jsp" %>
 <%@page import="java.util.GregorianCalendar"%>
+<%@page import="java.util.*"%>
+<%@page import="java.text.DecimalFormat" %>
 
 <jsp:useBean id="empresa" class="cadastro.Empresa" scope="page"></jsp:useBean>
 
@@ -10,13 +12,18 @@
 
 
 
+
+
 <%
+
+
 //Instancia um Objeto do tipo Statement para ajudar na Query
 Statement st01 = con.createStatement();
 Statement st02 = con.createStatement();
 Statement st03 = con.createStatement();
 Statement st04 = con.createStatement();
 Statement st05 = con.createStatement();
+Statement st06 = con.createStatement();
 %>
 
 <%
@@ -26,6 +33,7 @@ ResultSet rs02 = null;
 ResultSet rs03 = null;
 ResultSet rs04 = null;
 ResultSet rs05 = null;
+ResultSet rs06 = null;
 
 %>
 
@@ -70,8 +78,34 @@ if(request.getParameter("prazo") != null){
 	prazo =  Boolean.valueOf(request.getParameter("prazo"));
 }
 rs02 = st02.executeQuery(servico.listaServicosRelatorios(dtInic, dtFim,depart, St,prazo));
+rs06 = st06.executeQuery(servico.listaServicosRelatorios(dtInic, dtFim,depart, St,prazo));
+
+Double valTotal = 0.0;
+Double valEntradas = 0.0;
+Double valFaltantes = 0.0;
+
+String Total = "";
+String Entradas = "";
+String Faltantes = "";
+
+Currency currency = Currency.getInstance("BRL");
+
+DecimalFormat formato = new DecimalFormat("R$ #,##0.00");
+
+
+while(rs06.next()){
+	valTotal += rs06.getDouble("valor");
+	valEntradas += rs06.getDouble("entrada");
+	valFaltantes += rs06.getDouble("valor") - rs06.getDouble("entrada");
+}
+
+Total = formato.format(valTotal);
+Entradas = formato.format(valEntradas);
+Faltantes = formato.format(valFaltantes);
+
 
 GregorianCalendar cal = new GregorianCalendar();	
+
 %>
 
 
@@ -149,30 +183,40 @@ function EnviarPesquisa(dataInic, dataFim, depart, prazo)
 	      <!-- Esse é o espaço para que apareça o cabeçalho -->
 	      <table width="585" height="120" border="0" align="center" cellpadding="0" cellspacing="3">
 	       <tr>
-	        <td width="140" rowspan="5" align="left" valign="top"><a href="javascript: window.print() "><img src="images/logo_relatorio.png" border="0" title="Iprimir Relatorio"></a></td>
-	        <td width="300" height="15" align="center"><font size="4"><strong><%=nomeFantasia %></strong></font></td>
-	        <td width="140" rowspan="5" align="center">&nbsp;</td>
+	        <td  rowspan="5" align="center" valign="top"><a href="javascript: window.print() "><img src="images/logo_relatorio.png" border="0" title="Iprimir Relatorio"></a></td>
+	        <td colspan="2"  height="15" align="center"><font size="4"><strong><%=nomeFantasia %></strong></font></td>
+	        <td  rowspan="5" align="center">&nbsp;</td>
+	        <td>&nbsp;</td>
 	       </tr>
 	       <tr>
-	        <td height="15" align="center"><strong><%=endereco %></strong></td>
+	        <td colspan="2" height="15" align="center"><strong><%=endereco %></strong></td>
 	        </tr>
 	       <tr>
-	        <td height="15" align="center"><strong><%=bairro %></strong></td>
+	        <td colspan="2" height="15" align="center"><strong><%=bairro %></strong></td>
 	        </tr>
 	       <tr>
-	        <td height="15" align="center"><strong><%=cidade %></strong></td>
+	        <td colspan="2" height="15" align="center"><strong><%=cidade %></strong></td>
 	        </tr>
 	       <tr>
-	        <td height="15" align="center"><strong><%=telefone %></strong></td>
+	        <td colspan="2" height="15" align="center"><strong><%=telefone %></strong></td>
 	        </tr>
 	       <tr>
-	        <td align="center" colspan="3"><hr></td>
+	        <td align="center" colspan="4"><hr></td>
 	       </tr>
 	       <tr>
-	        <td height="15" colspan="3" align="center"><strong>RELATORIO - OS's</strong></td>
+	        <td height="15" align="left"><strong>RELATORIO - OS's</strong></td>
+		   		<td align="left">
+		   			Valor Total <%=Total %> 
+		   		</td>
+		   		<td align="left">
+		   			Entradas Total <%=Entradas %> 
+		   		</td>
+		   		<td align="left">
+		   			Faltante Total <%=Faltantes %>
+		   		</td>
 	       </tr>
 	       <tr>
-	        <td align="center" colspan="3"><hr></td>
+	        <td align="center" colspan="4"><hr></td>
 	       </tr>
 	      </table>
       </td>

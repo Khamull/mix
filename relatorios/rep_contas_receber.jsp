@@ -12,7 +12,7 @@
 String nivelUsuario = String.valueOf(session.getAttribute("nivel"));;
 
 //Se o nivel for restrito enviar para a página de erro
-if(nivelUsuario.equals("2") || nivelUsuario.equals("3") || nivelUsuario.equals("4") || nivelUsuario.equals("6")){
+if(nivelUsuario.equals("3") || nivelUsuario.equals("4") || nivelUsuario.equals("5") || nivelUsuario.equals("6") || nivelUsuario.equals("7") || nivelUsuario.equals("8")){
 	response.sendRedirect("forbiden.jsp");
 }
 %>

@@ -127,12 +127,12 @@ int servicoID = Integer.MIN_VALUE;
 				else
 				{
 					String  caminho = caminho_[j];
-					st02.execute(servico.cadastraServicoCaminhoOrçamento(nivel, caminho, "0"));
+					st02.execute(servico.cadastraServicoCaminhoOrcamento(nivel, caminho, "0"));
 				}
 				
 			}
 			if(rotina == 2){//Segue para inserção na tabela de serviços seguindo Rotina de Trabalho 3
-				st02.execute(servico.cadastraServico("8"));//Segue primeiro para produção
+				st02.execute(servico.cadastraServicoOrcamento(nivel));//Segue primeiro para produção
 			}
 		}
 

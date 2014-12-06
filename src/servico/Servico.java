@@ -86,6 +86,7 @@ public class Servico {
 	
 	public String listaServicosRelatorios(String dtInic, String dtFim, String depart, int St, Boolean prazo) {
 		String listaServ=""; 
+		String Controle = "";
 		listaServ += " select distinct servico.OS,	";
 		listaServ += " servico.anoServico,			";
 		listaServ += " servico.servicoID, 			";
@@ -105,6 +106,7 @@ public class Servico {
 		listaServ += " from servico inner join cliente on cliente.clienteID = servico.clienteID";
 		if(!dtInic.equals("") && !dtFim.equals(""))//Somente datas foram informadas
 		{
+			Controle = "1";
 			listaServ += " where servico.dataInicio between '"+dtInic+"' and '"+dtFim+"'";
 			if(!depart.equals("") && !depart.equals("-1"))//Datas selecionadas e com departamento específico
 			{
@@ -158,9 +160,10 @@ public class Servico {
 				}
 			}
 		}
-		if(prazo && dtInic.equals("") && dtFim.equals("") && St == 0 && depart.equals("-1"))//Somente a consulta por 
+		if(prazo)//Somente a consulta por prazo
 		{
-			listaServ += " where servico.dataprevista < servico.dataFim ";
+			if(!Controle.equals("1"))
+				listaServ += " where servico.dataprevista < servico.dataFim ";
 		}
 		
 		return listaServ;
@@ -179,7 +182,7 @@ public class Servico {
 			listaServ += " end as dataAgendamento1 ";
 			listaServ += "FROM servico INNER JOIN cliente ON cliente.clienteID = servico.clienteID ";
 			listaServ += "WHERE servico.empresaID = '"+empresa.empresaID+"' ";
-			listaServ += "and servico.finalizado <> 'F' AND servico.status <> 'F'  ORDER BY servico.servicoID DESC";
+			listaServ += "and servico.finalizado <> 'F' AND servico.status <> 'F' and servico.passo NOT IN ('ORCAMENTO', 'ORÇAMENTO', 'ORCAMENTO ACEITO', 'ORÇAMENTO ACEITO') ORDER BY servico.servicoID DESC";
 			
 			return listaServ;
 		}
@@ -278,7 +281,22 @@ public class Servico {
 		listaServ += " else servico.dataAgendamento";
 		listaServ += " end as dataAgendamento1 ";
 		listaServ += "FROM servico INNER JOIN cliente ON cliente.clienteID = servico.clienteID ";
-		listaServ += "WHERE finalizado <> 'F' AND status <> 'F'  AND servico.empresaID = '"+empresa.empresaID+"' and nivelUsuario = '"+ nivelUsuario +"' ORDER BY servico.servicoID DESC";
+		listaServ += "WHERE finalizado <> 'F' AND servico.passo NOT IN ('ORCAMENTO', 'ORÇAMENTO', 'ORCAMENTO ACEITO', 'ORÇAMENTO ACEITO') AND status <> 'F'  AND servico.empresaID = '"+empresa.empresaID+"' and nivelUsuario = '"+ nivelUsuario +"' ORDER BY servico.servicoID DESC";
+		
+		return listaServ;
+	}
+	public String listaOrcamentos(String nivelUsuario) {
+		String listaServ = "SELECT cliente.clienteID, cliente.clienteNomeFantasia, servico.*, ";
+		listaServ += " case servico.dataprevista ";
+		listaServ += " when '0000-00-00' then \"0\"";
+		listaServ += " else servico.dataprevista";
+		listaServ += " end as dataprevista1, ";
+		listaServ += " case servico.dataAgendamento ";
+		listaServ += " when '0000-00-00' then \"0\"";
+		listaServ += " else servico.dataAgendamento";
+		listaServ += " end as dataAgendamento1 ";
+		listaServ += "FROM servico INNER JOIN cliente ON cliente.clienteID = servico.clienteID ";
+		listaServ += "WHERE finalizado <> 'F' AND servico.tipo = '1' AND status <> 'F'  AND servico.empresaID = '"+empresa.empresaID+"' ORDER BY servico.servicoID DESC";
 		
 		return listaServ;
 	}
@@ -297,6 +315,7 @@ public class Servico {
 		listaServ += " WHERE finalizado <> 'F' AND status <> 'F'  AND servico.empresaID = '"+empresa.empresaID+"' and nivelUsuario IN ('"+ nivelUsuario +"', '3', '4', '5', '6')";
 		listaServ += " and rotina IN ('1','2')";
 		listaServ += " and passo IN ('PRD/NOVO','PRD/IMPRESSAO', 'PRD/ARTE FINAL', 'PRD/ACABAMENTO', 'PRODUCAO')";
+		listaServ += " and passo NOT IN ('ORCAMENTO', 'ORÇAMENTO', 'ORCAMENTO ACEITO', 'ORÇAMENTO ACEITO') ";
 		listaServ += " ORDER BY servico.servicoID DESC";
 		return listaServ;
 	}
@@ -422,6 +441,15 @@ public class Servico {
 		return salvaServ;
 	}
 	
+	public String cadastraServicoOrcamento(String nivelUsuario_) {
+		String salvaServ = "INSERT INTO servico ";
+		salvaServ += "(OS, anoServico, clienteID, empresaID, descricao, dataInicio, dataprevista, valor, usuario, nivelUsuario, passo, tipo ,rotina) ";
+		salvaServ += "VALUES ";
+		salvaServ += "('"+OS+"', '"+anoServico+"', '"+cliente.clienteID+"', '"+empresa.empresaID+"', '"+descricao+"', '"+dataInicio+"','"+ dataPrevista +"','"+valor+"', '"+usuario.usuarioID+"','"+nivelUsuario_+"','ORÇAMENTO', '1','2')";
+		
+		return salvaServ;
+	}
+	
 	public String cadastraServicoCaminho(String nivelUsuario, String caminho, String Rotina) {
 		String cam = caminho.replace("\\", "\\");
 		String salvaServ = "INSERT INTO servico ";
@@ -431,7 +459,7 @@ public class Servico {
 		
 		return salvaServ;
 	}
-	public String cadastraServicoCaminhoOrçamento(String nivelUsuario, String caminho, String Rotina) {
+	public String cadastraServicoCaminhoOrcamento(String nivelUsuario, String caminho, String Rotina) {
 		String cam = caminho.replace("\\", "\\");
 		String salvaServ = "INSERT INTO servico ";
 		salvaServ += "(OS, anoServico, clienteID, empresaID, descricao, dataInicio, dataprevista, valor, usuario, nivelUsuario, caminhoArte, passo, tipo,rotina) ";

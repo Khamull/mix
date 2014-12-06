@@ -55,9 +55,15 @@ else
 		}
 		else
 		{
-			if(request.getParameter("BUSCAR") == null)	
+			if(request.getParameter("BUSCAR") == null && request.getParameter("todosOrcamentos") == null){	
 			//rs = st.executeQuery(servico.listaServicosPendentes());
-			rs = st.executeQuery(servico.listaServicosPendentesPorCamada((String) session.getAttribute("nivel")));
+				rs = st.executeQuery(servico.listaServicosPendentesPorCamada((String) session.getAttribute("nivel")));
+			}
+			else
+			{
+				if(request.getParameter("todosOrcamentos") != null)
+					rs = st.executeQuery(servico.listaOrcamentos((String) session.getAttribute("nivel")));
+			}
 		}
 	}
 	else
@@ -267,18 +273,36 @@ function excluir(OS, ANO)
 <div id="corpo">
 <table width="985" align="center" height="440">
 <tr>
- <td height="25" bgcolor="#EEEEEE">
-<%if(session.getAttribute("nivel").equals("2") || session.getAttribute("nivel").equals("1")){  %>
- <input type="button" class="botao" onclick="javascript: window.location.href='sis_insert_nova_os.jsp'" value=" + Nova OS" />&nbsp;
- <input type="button" class="botao" onclick="javascript: window.location.href='sis_servicos_fechados.jsp'" value="OS's Fechados" />
- <form name="formBuscaTodos" method="post">
-    <input type="checkbox" placeholder="Pesquisa por OS(Ex.. OS/Ano)"  name="todos" onclick="this.form.submit();" value="buscarTodas"  />
-    <strong>Pesquisar Todas OS's Ativas</strong>
-  </form>
-  <%} %>
-  <%if(session.getAttribute("nivel").equals("7")){  %>
- <input type="button" class="botao" onclick="javascript: window.location.href='sis_insert_novo_orcamento.jsp?orcamento=1'" value=" + Novo Orçamento" />&nbsp;
-  <%} %>
+ <td height="25"  bgcolor="#EEEEEE">
+ 	<table>
+ 		<tr>
+ 			<%if(session.getAttribute("nivel").equals("2") || session.getAttribute("nivel").equals("1")){  %>
+ 			<td>
+				 <input type="button" class="botao" onclick="javascript: window.location.href='sis_insert_nova_os.jsp'" value=" + Nova OS" />&nbsp;
+			</td>
+			<td>	 
+				 <input type="button" class="botao" onclick="javascript: window.location.href='sis_servicos_fechados.jsp'" value="OS's Fechados" />
+			</td>
+			<td>	 
+				 <form name="formBuscaTodos" method="post">
+				    <input type="checkbox" name="todos" onclick="this.form.submit();" value="buscarTodas"  />
+				    <strong>Pesquisar Todas OS's Ativas</strong>
+				  </form>
+			</td>
+			<td>	  
+				  <form name="formBuscaTodosOrcamentos" method="post">
+				    <input type="checkbox" name="todosOrcamentos" onclick="this.form.submit();" value="buscarTodasOrcamentos"  />
+				    <strong>Pesquisar Todos Orçamentos</strong>
+				  </form>
+			</td>	  
+			 <%} %>
+			<%if(session.getAttribute("nivel").equals("7")){  %>
+			<td>
+				 <input type="button" class="botao" onclick="javascript: window.location.href='sis_insert_novo_orcamento.jsp?orcamento=1'" value=" + Novo Orçamento" />&nbsp;
+			</td>	 
+			<%} %>
+  		</tr>
+  	</table>
  </td>
  <td>
  </td>
@@ -495,7 +519,7 @@ while (rs.next()){
 		<a href="#" onclick="reagenda(<%=rs.getString("servicoID")%>, <%=rs.getString("OS")%>, <%=rs.getString("anoServico").substring(0,4) %>)" title="<%=rs.getString("observacao")%>"><%=rs.getString("passo") %></a>
 	<%}else if(rs.getString("passo").equals("AGENDAMENTO")) {%>
 		<a href="#" onclick="agenda(<%=rs.getString("servicoID")%>, <%=rs.getString("OS")%>, <%=rs.getString("anoServico").substring(0,4) %>)" title="<%=rs.getString("observacao")%>"><%=rs.getString("passo") %></a>
-	<%}else if(rs.getString("passo").equals("ORCAMENTO ACEITO")) {%>
+	<%}else if(rs.getString("passo").equals("ORÇAMENTO ACEITO")) {%>
 		<a href="#" title="<%=rs.getString("obsOrcamento")%>"><%=rs.getString("passo") %></a>
 	<%}else{ %>
 		<a href="#" onclick=""><%=rs.getString("passo") %></a>

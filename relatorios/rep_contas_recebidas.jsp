@@ -16,7 +16,7 @@
 String nivelUsuario = String.valueOf(session.getAttribute("nivel"));;
 
 //Se o nivel for restrito enviar para a página de erro
-if(nivelUsuario.equals("2") || nivelUsuario.equals("3") || nivelUsuario.equals("4") || nivelUsuario.equals("6")){
+if(nivelUsuario.equals("3") || nivelUsuario.equals("4") || nivelUsuario.equals("5") || nivelUsuario.equals("6") || nivelUsuario.equals("7") || nivelUsuario.equals("8")){
 	response.sendRedirect("forbiden.jsp");
 }
 %>
@@ -188,12 +188,12 @@ String valTotal = formato.format(valorTotal);
 <body bgcolor="#CCCCCC">
 
 <!-- PRIMEIRA PÁGINA -->
-<table align="center" cellpadding="0" cellspacing="0" width="630" height="980" style="1px solid border:#000000; background-color:#FFFFFF">
+<table align="center" cellpadding="0" cellspacing="0" width="1024" height="980" >
  <tr>
-  <td align="center" valign="middle">
+  <td align="center">
   
   <!-- Borda 1 -->
-   <table width="590" height="950" cellpadding="0" cellspacing="0" style="border:1px solid none" align="center">
+   <table  cellpadding="5" cellspacing="5" border="0"  align="center" style="1px solid border:#000000; background-color:#FFFFFF">
     <tr>
      <td align="center" valign="top" height="120">
       <!-- Esse é o espaço para que apareça o cabeçalho -->
@@ -231,7 +231,7 @@ String valTotal = formato.format(valorTotal);
      <td align="center" valign="top">
      
      <!-- ##########################   INICIO DO RELATORIO ######################## -->
-      <table border="0" cellpadding="0" cellspacing="0" width="585" align="center">
+      <table border="0" cellpadding="0" cellspacing="3" width="700" align="center">
       <%
       int ln = 1;
       while(rs02.next()){
@@ -241,9 +241,9 @@ String valTotal = formato.format(valorTotal);
       if(ln == 55){
       %>
       <tr>
-       <td colspan="4" height="170" valign="bottom">
+       <!--td colspan="4" height="170" valign="bottom">
        
-       <table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
+       < table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
        <tr>
         <td colspan="4" height="32"></td>
        </tr>
@@ -275,7 +275,7 @@ String valTotal = formato.format(valorTotal);
        </tr>
       </table>
        
-       </td>
+       </td-->
       </tr>
       <%
       //Se ja tiver preenchido reinicializa o valor do contador
@@ -283,10 +283,13 @@ String valTotal = formato.format(valorTotal);
       }
       %>
        <tr>
-        <td width="127" height="15" align="left"><strong>N&deg; Venda</strong></td>
-        <td width="96" align="left"></td>
-        <td width="223" align="left"><strong>Vencimento</strong></td>
-        <td width="139" align="left"></td>
+        <td><strong>N&deg; Venda</strong></td>
+        <td><strong>Cliente</strong></td>
+        <td><strong>Valor da Conta</strong></td>
+        <td ><strong>Forma de Pgto</strong></td>
+        <td align="center"><strong>Vencimento</strong></td>
+        <td align="center"><strong>Pgto</strong></td>
+        <td align="center"><strong>Parc</strong></td>
        </tr>
       <%ln++; %>
       <%
@@ -294,9 +297,9 @@ String valTotal = formato.format(valorTotal);
       if(ln == 55){
       %>
       <tr>
-       <td colspan="4" height="170" valign="bottom">
+       <!--td colspan="4" height="170" valign="bottom">
        
-       <table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
+       < table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
        <tr>
         <td colspan="4" height="32"></td>
        </tr>
@@ -328,7 +331,7 @@ String valTotal = formato.format(valorTotal);
        </tr>
       </table>
        
-       </td>
+       </td-->
       </tr>
       <%
       //Se ja tiver preenchido reinicializa o valor do contador
@@ -336,10 +339,22 @@ String valTotal = formato.format(valorTotal);
       }
       %>
         <tr>
-         <td height="15" align="left"><%=rs02.getString("vendaID") %></td>
-         <td align="left"></td>
+         <td height="15" align="left"><%=rs02.getString("vendaID")+"/"+anoInicio %></td>
+         <td>
+	         <%
+	    	 //Verifica se ele vendeu para um Cliente Cadastrado ou não e trata a informação
+	    	 if(rs02.getString("clienteNomeFantasia")==null){
+	    	 %>
+	    	 <font color="#454545">N&Atilde;O CADASTRADO</font>
+	    	 <%}else{ %>
+	    	 <%=rs02.getString("clienteNomeFantasia") %>
+	    	 <%} %>
+         </td>
+         <td align="left"><%=formato.format(rs02.getDouble("valor")) %></td>
+         <td align="left"><%=rs02.getString("descricao") %></td>
          <td align="left"><%=data.converteDeData(String.valueOf(rs02.getString("vencimento")))  %></td>
-         <td align="left"></td>
+         <td align="left"><%=data.converteDeData(String.valueOf(rs02.getString("dataAlteracao").subSequence(0, 10)))  %></td>
+         <td align="right"><%=rs02.getString("parcela") %> / <%=rs02.getString("de") %></td>
         </tr>
      <%ln++; %>
       <%
@@ -347,7 +362,7 @@ String valTotal = formato.format(valorTotal);
       if(ln == 55){
       %>
       <tr>
-       <td colspan="4" height="170" valign="bottom">
+       <!-- td colspan="4" height="170" valign="bottom">
        
        <table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
        <tr>
@@ -381,25 +396,25 @@ String valTotal = formato.format(valorTotal);
        </tr>
       </table>
        
-       </td>
+       </td-->
       </tr>
       <%
       //Se ja tiver preenchido reinicializa o valor do contador
       ln = 1;
       }
       %>
-        <tr>
+        <!-- tr>
          <td height="15" align="left" colspan="2"><strong>Forma de Pagamento</strong></td>
          <td align="left"><strong>Parcela</strong></td>
          <td align="left"><strong></strong></td>
-        </tr>
+        </tr-->
      <%ln++; %>
       <%
       //Verifica se ja preecheu as 54 linhas e da um espaçamento
       if(ln == 55){
       %>
       <tr>
-       <td colspan="4" height="170" valign="bottom">
+       <!-- td colspan="4" height="170" valign="bottom">
        
        <table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
        <tr>
@@ -433,25 +448,25 @@ String valTotal = formato.format(valorTotal);
        </tr>
       </table>
        
-       </td>
+       </td-->
       </tr>
       <%
       //Se ja tiver preenchido reinicializa o valor do contador
       ln = 1;
       }
       %>
-        <tr>
+        <!-- tr>
          <td height="15" align="left" colspan="2"><%=rs02.getString("descricao") %></td>
          <td align="left"><%=rs02.getString("parcela") %> / <%=rs02.getString("de") %></td>
          <td align="left"></td>
-        </tr>
+        </tr-->
       <%ln++; %>
       <%
       //Verifica se ja preecheu as 54 linhas e da um espaçamento
       if(ln == 55){
       %>
       <tr>
-       <td colspan="4" height="170" valign="bottom">
+       <!-- td colspan="4" height="170" valign="bottom">
        
        <table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
        <tr>
@@ -485,24 +500,24 @@ String valTotal = formato.format(valorTotal);
        </tr>
       </table>
        
-       </td>
+       </td-->
       </tr>
       <%
       //Se ja tiver preenchido reinicializa o valor do contador
       ln = 1;
       }
       %>
-        <tr>
-         <td height="15" align="left" colspan="3"><strong>Cliente</strong></td>
+        <!-- tr>
+         < td height="15" align="left" colspan="3"><strong>Cliente</strong></td>
          <td align="left"><strong>Valor da Conta</strong></td>
-        </tr>
+        </tr-->
       <%ln++; %>
       <%
       //Verifica se ja preecheu as 54 linhas e da um espaçamento
       if(ln == 55){
       %>
       <tr>
-       <td colspan="4" height="170" valign="bottom">
+       <!-- td colspan="4" height="170" valign="bottom">
        
        <table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
        <tr>
@@ -536,14 +551,14 @@ String valTotal = formato.format(valorTotal);
        </tr>
       </table>
        
-       </td>
+       </td-->
       </tr>
       <%
       //Se ja tiver preenchido reinicializa o valor do contador
       ln = 1;
       }
       %>
-        <tr>
+        <!-- tr>
          <td height="15" align="left" colspan="3">
          <%
     	 //Verifica se ele vendeu para um Cliente Cadastrado ou não e trata a informação
@@ -555,14 +570,14 @@ String valTotal = formato.format(valorTotal);
     	 <%} %>
          </td>
          <td align="left"><%=formato.format(rs02.getDouble("valor")) %></td>
-        </tr>
+        </tr-->
      <%ln++; %>
      <%
       //Verifica se ja preecheu as 54 linhas e da um espaçamento
       if(ln == 55){
      %>
       <tr>
-       <td colspan="4" height="170" valign="bottom">
+       <!-- td colspan="4" height="170" valign="bottom">
        
        <table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
        <tr>
@@ -596,7 +611,7 @@ String valTotal = formato.format(valorTotal);
        </tr>
       </table>
        
-       </td>
+       </td-->
       </tr>
       <%
       //Se ja tiver preenchido reinicializa o valor do contador
@@ -630,18 +645,20 @@ String valTotal = formato.format(valorTotal);
       %>
       
        <tr>
-        <td height="15" align="left"><strong>Banco</strong></td>
-        <td align="left"><strong>Desconto</strong></td>
-        <td align="left"><strong>Acrescimo</strong></td>
-        <td align="left"><strong>Valor Recebido</strong></td>
+        <td height="15" align="left"><strong>Banco <%=banco %> </strong></td>
+        <td align="left"><strong>Valor Recebido</strong></td><td align="left"><%=valorRecebido%></td>
        </tr>
+       
+       
+
+        
      <%ln++; %>
       <%
       //Verifica se ja preecheu as 54 linhas e da um espaçamento
       if(ln == 55){
       %>
       <tr>
-       <td colspan="4" height="170" valign="bottom">
+       <!-- td colspan="4" height="170" valign="bottom">
        
        <table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
        <tr>
@@ -675,7 +692,7 @@ String valTotal = formato.format(valorTotal);
        </tr>
       </table>
        
-       </td>
+       </td-->
       </tr>
       <%
       //Se ja tiver preenchido reinicializa o valor do contador
@@ -683,19 +700,18 @@ String valTotal = formato.format(valorTotal);
       }
       %>
       
-       <tr>
+       <!-- tr>
         <td height="15" align="left"><%=banco %></td>
-        <td align="left"><%=desconto %></td>
-        <td align="left"><%=acrescimo %></td>
+        <!td align="left"><%=desconto %></td>
         <td align="left"><%=valorRecebido%></td>
-       </tr>
+       </tr-->
      <%ln++; %>
       <%
       //Verifica se ja preecheu as 54 linhas e da um espaçamento
       if(ln == 55){
       %>
       <tr>
-       <td colspan="4" height="170" valign="bottom">
+       <!-- td colspan="4" height="170" valign="bottom">
        
        <table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
        <tr>
@@ -729,23 +745,23 @@ String valTotal = formato.format(valorTotal);
        </tr>
       </table>
        
-       </td>
+       </td-->
       </tr>
       <%
       //Se ja tiver preenchido reinicializa o valor do contador
       ln = 1;
       }
       %>
-       <tr>
+       <!-- tr>
         <td height="15" align="left" colspan="4"><strong>Observacoes</strong></td>
-       </tr>
+       </tr-->
      <%ln++; %>
       <%
       //Verifica se ja preecheu as 54 linhas e da um espaçamento
       if(ln == 55){
       %>
       <tr>
-       <td colspan="4" height="170" valign="bottom">
+       <!-- td colspan="4" height="170" valign="bottom">
        
        <table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
        <tr>
@@ -779,23 +795,23 @@ String valTotal = formato.format(valorTotal);
        </tr>
       </table>
        
-       </td>
+       </td-->
       </tr>
       <%
       //Se ja tiver preenchido reinicializa o valor do contador
       ln = 1;
       }
       %>
-       <tr>
+       <!-- tr>
         <td height="15" align="left" colspan="4"><%=observacao %></td>
-       </tr>
+       </tr-->
     <%ln++; %>
       <%
       //Verifica se ja preecheu as 54 linhas e da um espaçamento
       if(ln == 55){
       %>
       <tr>
-       <td colspan="4" height="170" valign="bottom">
+       <!-- td colspan="4" height="170" valign="bottom">
        
        <table width="585" border="0" align="center" cellpadding="0" cellspacing="0">
        <tr>
@@ -829,7 +845,7 @@ String valTotal = formato.format(valorTotal);
        </tr>
       </table>
        
-       </td>
+       </td-->
       </tr>
       <%
       //Se ja tiver preenchido reinicializa o valor do contador
@@ -837,7 +853,7 @@ String valTotal = formato.format(valorTotal);
       }
       %>  
       <tr>
-       <td height="15" colspan="4" align="center"> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </td>
+       <td height="15" colspan="8" align="center"> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </td>
       </tr>
      <%ln++; %>
      <%} %>
