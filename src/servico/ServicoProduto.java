@@ -23,6 +23,16 @@ public class ServicoProduto {
 		return pesquisaProd;
 	}
 	
+	public String pesquisaOutrosProdutos(String prdID) {//Pesquisa Todos os Produtos menos o que já esta selecionado no serviço
+		
+		String pesquisaProduto = " SELECT produtos.*";
+		pesquisaProduto += " FROM produtos";
+		pesquisaProduto += " where produtoID <> "+ prdID;
+		pesquisaProduto += " order by nome asc";
+	
+		return pesquisaProduto;
+	}
+	
 	public String listaProdutosOS(String OS, String Ano) {
 		String pesquisaProd = "SELECT produtos.*, servicoproduto.*, servico.*, servico.valor as val ";
 		pesquisaProd += "FROM servicoproduto INNER JOIN produtos ON produtos.produtoID = servicoproduto.produtoID INNER JOIN servico ON servico.servicoID = servicoproduto.servicoID ";
@@ -69,6 +79,11 @@ public class ServicoProduto {
 		pesquisaProd += "WHERE servicoproduto.servicoID = '"+servico.servicoID+"'";
 		
 		return pesquisaProd;
+	}
+	
+	public String updateMateriais(int ServicoID,int ProdutoID, int ProdutoIDNovo){
+		String update = "UPDATE servicomateriais SET produtoID='"+ProdutoIDNovo+"' where idServico ='"+ServicoID+"'  and produtoID='"+ProdutoID+"'";
+		return update;
 	}
 	
 	//Pesquisa produto por ID

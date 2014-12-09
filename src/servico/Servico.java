@@ -588,6 +588,11 @@ public class Servico {
 		return "UPDATE servico SET caminhoArte = '"+caminho+"' WHERE servicoID = '"+servicoID+"'";
 	}
 	
+	public String UPProdutoServico(String prodID, String qtd, String Alt, String Larg) {
+		String up = "UPDATE servicoproduto SET produtoID='"+prodID+"', qtdProduto='"+qtd+"', altura='"+Alt+"',largura='"+Larg+"' WHERE servicoID = '"+servicoID+"'";
+		return up;
+	}
+	
 	//Muda o status (Visualizado) para N(NÃO)
 	public String naoVisualizado() {
 		return "UPDATE servico SET visualizacao = 'N' WHERE servicoID = '"+servicoID+"'";

@@ -1,5 +1,4 @@
 <%@page import="servico.ServicoProduto"%>
-
 <%@ page import="java.sql.*" %>
 <%@ include file="inc/seguranca.jsp" %>
 <%@ include file="inc/conexao.jsp" %>
@@ -17,6 +16,7 @@
 Statement st01 = con.createStatement();
 Statement st02 = con.createStatement();
 Statement st03 = con.createStatement();
+Statement st04 = con.createStatement();
 %>
 
 
@@ -26,6 +26,7 @@ ResultSet rs = null;
 ResultSet rs01;
 ResultSet rs02;
 ResultSet rs03;
+ResultSet rs04;
 %>
 
 
@@ -84,6 +85,11 @@ function verForm(){
 	
 }
 
+function alterarProd(servicoProdutoID, servicoID ,prodID){
+	if (confirm("Editar Prodtuos?")){
+		window.location.href = "sis_update_os.jsp?servicoID="+servicoID+"&altera=0";
+	}	
+}
 
 function addServico(servicoID){
 	if (confirm("Adicionar Servico?")){
@@ -117,7 +123,18 @@ function dataPrevisao(servicoID, obj){
 function caminho(servicoID, obj){
 	window.location.href="sis_manager_caminho.jsp?servicoID="+servicoID+"&caminho="+obj.value;
 }
-
+function SalvarProd(servicoID){
+	var produto 	= document.getElementById("prd").value;
+	var altura 		= document.getElementById("altura").value;
+	var largura 	= document.getElementById("largura").value;
+	var qtd		= document.getElementById("qtd").value;
+	var Destino 	= "sis_manager_updateos.jsp?servicoID="+servicoID
+	Destino += "&prd="+produto;
+	Destino += "&largura="+largura;
+	Destino += "&altura="+altura;
+	Destino += "&qtd="+qtd;
+	window.location.href= Destino;
+}
 
 </script>
 
@@ -256,18 +273,41 @@ function caminho(servicoID, obj){
         	<td>Produto</td><td colspan="6" align="left"></td>
         </tr-->
          <tr>
-          <td colspan="2"  align="center"><%=rs02.getString("nome") %></td>
-          <td colspan="2"  align="center">Altura : <%=rs02.getString("altura") %></td>
-          <td colspan="2"  align="center">Largura : <%=rs02.getString("largura") %></td>
-          <td colspan="2"  align="center">Quantidade : <%=rs02.getString("qtdProduto") %></td>
-          <%if(rs02.getString("rotinaID").equals("0") || rs02.getString("rotinaID").equals("1")) {%>
-          	<%if(rs02.getString("caminhoArte") == null){%>
-          		<td colspan="4"  align="center">Caminho Arte : <input type="text" name="caminhoArte" id="caminhoArte" onchange="caminho(<%=rs.getString("servicoID")%>, this)"/></td>
-          	<%}else{ %>
-          		<td colspan="4"  align="center">Caminho Arte : <%=rs02.getString("caminhoArte") %></td>
-          	<%} %>
+         <%if(request.getParameter("altera") != null && request.getParameter("altera").equals("0")) {%>
+		          <td colspan="2"  align="center" >
+		          	<select style="size:50px; max-width: 100px" id="prd">
+		          		<option value="<%=rs02.getString("produtoID")%>" selected="selected"><%=rs02.getString("nome") %></option>
+		          		<%rs04 = st04.executeQuery(servicoproduto.pesquisaOutrosProdutos(rs02.getString("produtoID"))); %>
+		          		<%while(rs04.next()){ %>
+		          			<option value="<%=rs04.getString("produtoID")%>"><%=rs04.getString("nome") %></option>
+		          		<%} %>
+		          	</select>	
+		          </td>
+		          <td colspan="2"  align="center">Altura : <input type="number" value="<%=rs02.getString("altura") %>" id="altura" min="0" step="0.01" style="text-align: right; size:50px; max-width: 50px"/></td>
+		          <td colspan="2"  align="center">Largura : <input type="number" value="<%=rs02.getString("largura") %>" id="largura" min="0" step="0.01" style="text-align: right; size:50px; max-width: 50px"/></td>
+		          <td colspan="2"  align="center">Quantidade : <input type="number" value="<%=rs02.getString("qtdProduto") %>" id="qtd" min="0" step="0.01" style="text-align: right; size:50px; max-width: 50px"/></td>
+		          <%if(rs02.getString("rotinaID").equals("0") || rs02.getString("rotinaID").equals("1")) {%>
+		          	<%if(rs02.getString("caminhoArte") == null){%>
+		          		<td colspan="4"  align="center">Caminho Arte : <input type="text" name="caminhoArte" id="caminhoArte" onchange="caminho(<%=rs.getString("servicoID")%>, this)"/></td>
+		          	<%}else{ %>
+		          		<td colspan="4"  align="center">Caminho Arte : <%=rs02.getString("caminhoArte") %></td>
+		          	<%} %>
+		          <%} %>
+		          <td  align="right"><a href="javascript: SalvarProd(<%=rs02.getString("servicoID")%>)"><img src="ico/ico_joinha.png" width="18" height="18" border="0" title="Salvar Alterações" /></a></td>
+          <%}else{ %>
+          	<td colspan="2"  align="center"><%=rs02.getString("nome") %></td>
+		          <td colspan="2"  align="center">Altura : <%=rs02.getString("altura") %></td>
+		          <td colspan="2"  align="center">Largura : <%=rs02.getString("largura") %></td>
+		          <td colspan="2"  align="center">Quantidade : <%=rs02.getString("qtdProduto") %></td>
+		          <%if(rs02.getString("rotinaID").equals("0") || rs02.getString("rotinaID").equals("1")) {%>
+		          	<%if(rs02.getString("caminhoArte") == null){%>
+		          		<td colspan="4"  align="center">Caminho Arte : <input type="text" name="caminhoArte" id="caminhoArte" onchange="caminho(<%=rs.getString("servicoID")%>, this)"/></td>
+		          	<%}else{ %>
+		          		<td colspan="4"  align="center">Caminho Arte : <%=rs02.getString("caminhoArte") %></td>
+		          	<%} %>
+		          <%} %>
+		          <td  align="right"><a href="javascript: alterarProd(<%=rs02.getString("servicoprodutoID")%>, <%=rs02.getString("servicoID")%>, <%=rs02.getString("produtoID") %>)"><img src="ico/ico_pedido.png" width="18" height="18" border="0" title="Alterar Produto" /></a></td>
           <%} %>
-          <td  align="right"><!-- <a href="javascript: excluirProd(<%=rs02.getString("servicoprodutoID")%>, <%=rs02.getString("servicoID")%>, <%=rs02.getString("produtoID") %>)"><img src="ico/ico_cancelar.png" width="18" height="18" border="0" title="Excluir Produto" /></a--></td>
          </tr>
 		</table>
 		<%i++;
