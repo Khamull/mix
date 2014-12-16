@@ -63,7 +63,7 @@ if(request.getParameter("desconto") != ""){
 
 
 //Adiciona ao objeto servico
-servico.servicoID 					= Integer.parseInt(request.getParameter("servicoID"));
+servico.servicoID 					= Integer.parseInt(request.getParameter("servicoID"));//passar todas as variaveis de novo via URL
 servico.formaPagamento.formPagID 	= Integer.parseInt(request.getParameter("formID"));
 servico.cliente.clienteID 			= Integer.parseInt(request.getParameter("clienteID"));
 servico.valor						= Float.parseFloat(request.getParameter("valorVariavel"));

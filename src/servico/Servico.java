@@ -429,6 +429,11 @@ public class Servico {
 			
 			return "SELECT servicoID+1 as ID FROM servico ORDER BY servicoID DESC LIMIT 1";
 		}
+		
+		public String valoresJaPagos(String OS, String Ano){
+			
+			return "SELECT * FROM `servico` WHERE `formPagID` <> '0' and `entrada` <> '0.00' and OS= '"+OS+"' and anoServico = '"+Ano+"'";
+		}
 	
 	
 	//Cadastra um novo Serviço

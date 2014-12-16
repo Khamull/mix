@@ -118,7 +118,29 @@ function verForm(){
 		document.form1.parcelas.focus();
 		return false;
 	}
-	
+	if(document.form1.formID.value == "7")
+	{
+		if(confirm("Deseja Alterar as Datas de Pagamento?")){
+		var formID = document.form1.formID.value;
+		var parcelas = document.form1.parcelas.value;
+		var clienteID = document.form1.clienteID.value;
+		var desconto = document.form1.desconto.value;
+		var entrada = document.form1.pago.value;
+		var troco = document.form1.troco.value;
+		var valorTotalVenda = <%=rs.getString("valor")%>;
+        var servicoID = <%=request.getParameter("servicoID")%>;
+        var OS = <%=request.getParameter("OS") %>;
+        var ano = <%=request.getParameter("Ano") %>;
+		//alert(document.form1.parcelas.value);
+		var width = 150;// dados para a abertura da nova janela! Vamos fazer todas as outras chamadas a partir dela, infelizmente
+		var height = 250;
+		var left = 99;
+		var top = 99;
+			 window.open("sis_altera_pagamentos.jsp?parcelas="+parcelas+"&formID="+formID+"&clienteID="+clienteID+"&desconto="+desconto+"&entrada="+entrada+"&troco="+troco+"&valorTotal="+valorTotalVenda+"&servicoID="+servicoID+"&OS="+OS+"&Ano="+ano,'','janela', 'width='+width+', height='+height+', top='+top+', left='+left+', scrollbars=yes, status=no, toolbar=no, location=no, directories=no, menubar=no, resizable=no, fullscreen=no');
+			return false;
+		}		
+		return false;
+	}
 }
 
 //Função para Mudar o Foco do campo e calcula o troco
@@ -219,6 +241,10 @@ function trocaCampo(){
 //Valida se o Campo é Numérico (COM VÍRGULA " , " )
 function numero()	{
 if (event.keyCode<48 && event.keyCode!=44 || event.keyCode>57 && event.keyCode!=44){return false;} 
+}
+
+function ValidaVendaVale(){
+	return false;
 }
 
 </script>
@@ -416,7 +442,7 @@ if (event.keyCode<48 && event.keyCode!=44 || event.keyCode>57 && event.keyCode!=
          <tr>
           <td></td>
           <td></td>
-          <td align="right" colspan="2" height="50" valign="middle"><input type="submit" name="concluir" style="border:0px; background-image:url(images/concluirpdv.png); width:210px; height:55px;" value="" title="Concluir Venda" />
+          <td align="right" colspan="2" height="50" valign="middle"><input type="submit" name="concluir" style="border:0px; background-image:url(images/concluirpdv.png); width:210px; height:55px;" value="" title="Concluir Venda" onclick="ValidaVendaVale()" />
           </td> 
          </tr>
         </table>

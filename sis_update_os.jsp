@@ -17,6 +17,7 @@ Statement st01 = con.createStatement();
 Statement st02 = con.createStatement();
 Statement st03 = con.createStatement();
 Statement st04 = con.createStatement();
+Statement st05 = con.createStatement();
 %>
 
 
@@ -27,6 +28,7 @@ ResultSet rs01;
 ResultSet rs02;
 ResultSet rs03;
 ResultSet rs04;
+ResultSet rs05;
 %>
 
 
@@ -215,13 +217,20 @@ function SalvarProd(servicoID){
   <tr bgcolor="#F9F6F2">
     <td align="left">VALOR TOTAL</td>
     <td align="left"><font color="#009900"><strong><%=formato.format(rs.getDouble("valor")) %></strong></font></td>
-    <td colspan="2"  align="left">
-    &Uacute;ltima Altera&ccedil;&atilde;o&nbsp; &nbsp; <%=data.converteDeData(String.valueOf(rs.getDate("dataFim"))) %>
-    <%if(rs.getString("status").equals("M")) {%><input type="button" name="concluir" onclick="javascript: window.location.href='sis_finalizar_servico.jsp?servicoID=<%=rs.getString("servicoID")%>&OS=<%=rs.getString("OS")%>&Ano=<%=rs.getString("anoServico").substring(0,4)%>'" style="background-color:transparent; background-image:url(images/icone-financeiro.png); background-repeat:no-repeat; width:200px; height:22px; border:0; background-size:15% 100%;
--webkit-background-size:15% 100%;
--o-background-size: 15% 100%;
--khtml-background-size: 15% 100%;
--moz-background-size: 15% 100%;" value="" title="Pagamentos" /><%} %></td>
+    <td colspan="4"  align="left">
+	    &Uacute;ltima Altera&ccedil;&atilde;o&nbsp; &nbsp; <%=data.converteDeData(String.valueOf(rs.getDate("dataFim"))) %>
+	    <%if(rs.getString("status").equals("M")) {%><input type="button" name="concluir" onclick="javascript: window.location.href='sis_finalizar_servico.jsp?servicoID=<%=rs.getString("servicoID")%>&OS=<%=rs.getString("OS")%>&Ano=<%=rs.getString("anoServico").substring(0,4)%>'" style="background-color:transparent; background-image:url(images/icone-financeiro.png); background-repeat:no-repeat; width:200px; height:22px; border:0; background-size:15% 100%;
+	-webkit-background-size:15% 100%;
+	-o-background-size: 15% 100%;
+	-khtml-background-size: 15% 100%;
+	-moz-background-size: 15% 100%;" value="" title="Pagamentos" /><%} %></td>
+    </tr>
+    <tr>
+    	<td align="left">ENTRADA</td>
+    	<%rs05 = st05.executeQuery(servico.valoresJaPagos(rs.getString("OS"), rs.getString("anoServico")));
+    	if(rs05.next()){%>
+    		<td align="left"><font color="#009900"><strong><%=formato.format(rs05.getDouble("entrada")) %></strong></font></td>
+    	<%} %>
     </tr>
   <tr bgcolor="#FFFF99">
    <td colspan="6" align="center">Descri&ccedil;&atilde;o do Servi&ccedil;o&nbsp;<a href="sis_update_descricao_servico.jsp?servicoID=<%=rs.getString("servicoID")%>" style="font-size:10px" title="Editar Descriçao do Serviço">[editar]</a></td>
