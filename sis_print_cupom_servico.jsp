@@ -129,7 +129,11 @@ function imprimirCupom(){
 }
 
 function fechar(){
-	window.location.href="sis_view_servicos.jsp";	
+	<%if(request.getParameter("receberID")!= null){%>
+		window.location.href="sis_divida_cliente.jsp?clienteID="+<%=cliente.clienteID%>;
+	<%}else{%>
+		window.location.href="sis_view_servicos.jsp";
+	<%}%>
 }
 
 </script>

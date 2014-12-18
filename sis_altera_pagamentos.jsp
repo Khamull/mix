@@ -1,6 +1,11 @@
+<%//@ page errorPage="index.jsp?erro=3" %>
 <%@ page import="java.sql.*" %>
-<%@ page import="java.util.*" %>
 <%@ page import="java.text.*" %>
+<%@ page import = "java.util.Date,java.text.SimpleDateFormat,java.text.ParseException"%>
+<%@ include file="inc/conexao.jsp" %>
+<%@ include file="inc/seguranca.jsp" %>
+<%@ page import="java.util.*" %>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"  pageEncoding="ISO-8859-1"%>
 <jsp:useBean id="data_" class="formatar.Datas" scope="page"></jsp:useBean>
 <%
@@ -123,9 +128,19 @@ Calendar hoje = Calendar.getInstance();
  
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>FORTE SYSTEM</title>
+
+<!--[if lt IE 7]>
+ <style type="text/css">
+ .dock img { behavior: url(iepngfix.htc) }
+ </style>
+<![endif]-->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="css/geral.css" rel="stylesheet" type="text/css" />
 <title>Altere as datas e valores dos pagamentos</title>
   <link rel="stylesheet" href="jquery/jquery-ui.css">
   <style type="text/css">
@@ -178,12 +193,21 @@ Calendar hoje = Calendar.getInstance();
   </script>
 </head>
 <body>
+<div id="container">
+
+<div id="topo">
+</div>
+<div id="corpo">
+<p>
 <form name="form1" method="post" action="sis_finalizar_manager_servico.jsp?OS=<%=request.getParameter("OS") %>&Ano=<%=request.getParameter("Ano") %>&alteradata=1" id="form1">
 <table align="center" >
 <tr>
 <td>
 <div align="center">
 <div class="Table">
+	<div class="Title">
+		Alterar datas de Vencimento - Venda Vale
+	</div>
     <div class="Heading">
         <div class="Cell">
             <p>Parcela</p>
@@ -195,10 +219,10 @@ Calendar hoje = Calendar.getInstance();
             <p>Data</p>
         </div>
     </div>
-    <%for(int i = 1; i<parcelas; i++) {%>
+    <%for(int i = 0; i<parcelas; i++) {%>
 	<div class="Row" align="center">
         <div class="Cell">
-            <p><%=i %></p>
+            <p><%=i+1 %></p>
         </div>
         <div class="Cell">
             <p>
@@ -252,8 +276,22 @@ Calendar hoje = Calendar.getInstance();
 <tr>
 </table>        
 <div align="center">
+	<input type="hidden" name="servicoID" value="<%=request.getParameter("servicoID") %>"/>
+	<input type="hidden" name="formID" value="<%=request.getParameter("formID") %>"/>
+	<input type="hidden" name="clienteID" value="<%=request.getParameter("clienteID") %>"/>
+	<input type="hidden" name="parcelas" value="<%=request.getParameter("parcelas") %>"/>
+	<input type="hidden" name="valorVariavel" value="<%=valorTotalVenda%>"/>
+	<input type="hidden" name="pago" value="<%=request.getParameter("entrada") %>"/>
+	<input type="hidden" name="troco" value="<%=request.getParameter("troco") %>"/>
+	<input type="hidden" name="desconto" value="<%=request.getParameter("desconto") %>"/>
 	<input type="submit" value="Gravar"/>
+	<p>
 </div>
+	
 </form>
+</div>
+</div>
+<div id="rodape"><jsp:include page="inc/rodape.jsp" />
+</div>
 </body>
 </html>

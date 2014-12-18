@@ -24,14 +24,19 @@ function Pager(tableName, itemsPerPage) {
 
         var oldPageAnchor = document.getElementById('pg'+this.currentPage);
         oldPageAnchor.className = 'pg-normal';
+        if(this.currentPage != 1 && this.currentPage != 2 && this.currentPage != 3 && this.currentPage != this.pages)
+        	oldPageAnchor.style.display = "none";
         
         this.currentPage = pageNumber;
         var newPageAnchor = document.getElementById('pg'+this.currentPage);
-        newPageAnchor.className = 'pg-selected';
         
+        newPageAnchor.className = '';
+        if(this.currentPage != 1 && this.currentPage != 2 && this.currentPage != 3 && this.currentPage != this.pages)
+        	newPageAnchor.style.display = "";
         var from = (pageNumber - 1) * itemsPerPage + 1;
         var to = from + itemsPerPage - 1;
         this.showRecords(from, to);
+       ;
     }   
     
     this.prev = function() {
@@ -41,7 +46,7 @@ function Pager(tableName, itemsPerPage) {
     
     this.next = function() {
         if (this.currentPage < this.pages) {
-            this.showPage(this.currentPage + 1);
+            this.showPage(this.currentPage + 1);            
         }
     }                        
     
@@ -60,10 +65,19 @@ function Pager(tableName, itemsPerPage) {
     	var element = document.getElementById(positionId);
     	
     	var pagerHtml = '<span onclick="' + pagerName + '.prev();" class="pg-ctrl"> &#171 </span>';
-        for (var page = 1; page <= this.pages; page++) 
-            pagerHtml += '<span id="pg' + page + '" class="pg-normal" onclick="' + pagerName + '.showPage(' + page + ');">' + page + '</span>';
-        pagerHtml += '<span onclick="'+pagerName+'.next();" class="pg-ctrl"> &#187;</span>';            
-        
+        for (var page = 1; page <= this.pages; page++){ 
+        	if(page == 1 || page == 2 || page == 3 ){
+        		pagerHtml += '<span id="pg' + page + '" class="pg-normal" onclick="' + pagerName + '.showPage(' + page + ');" >' + page + '</span>';
+        	}
+        	if(page == this.pages){
+            		pagerHtml += '<span id="pg' + page + '" class="pg-normal" onclick="' + pagerName + '.showPage(' + page + ');" >' + page + '</span>';
+        	}
+        	else{
+        			pagerHtml += '<span id="pg' + page + '" class="pg-normal" onclick="' + pagerName + '.showPage(' + page + ');" style="display: none;">' + page + '</span>';
+        	}
+        }
+        pagerHtml += '<span onclick="'+pagerName+'.next();" class="pg-ctrl"> &#187;</span>';
+
         element.innerHTML = pagerHtml;
     }
 }

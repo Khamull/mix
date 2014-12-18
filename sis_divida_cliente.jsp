@@ -127,14 +127,14 @@ function verForm(){
  %>
  
    <tr>
-     <td colspan="8" align="left" valign="middle"><input type="button" onclick="javascript: window.open('sis_extrato_contas_pagas.jsp?clienteID=<%=request.getParameter("clienteID")%>', 'Lista' , 'height = 580 , width = 620');" value="Extrato Dividas Pagas" /></td>
+     <td colspan="9" align="left" valign="middle"><input type="button" onclick="javascript: window.open('sis_extrato_contas_pagas.jsp?clienteID=<%=request.getParameter("clienteID")%>', 'Lista' , 'height = 580 , width = 620');" value="Extrato Dividas Pagas" /></td>
    </tr>
    <tr>
-     <td colspan="8" align="center" valign="middle"><strong><font color="#FF0000"><%=msg%></font></strong></td>
+     <td colspan="9" align="center" valign="middle"><strong><font color="#FF0000"><%=msg%></font></strong></td>
    </tr>
  
    <tr bgcolor="#99CC99">
-    <td height="35" colspan="8" align="center" valign="middle"><strong>ATUALMENTE&nbsp; <font color="#0000FF"><%=rs01.getString("clienteNomeFantasia") %></font>&nbsp; EST&Aacute; DEVENDO:&nbsp; <font color="#0000FF"><%=faltaPagar %></font> </strong></td>
+    <td height="35" colspan="9" align="center" valign="middle"><strong>ATUALMENTE&nbsp; <font color="#0000FF"><%=rs01.getString("clienteNomeFantasia") %></font>&nbsp; EST&Aacute; DEVENDO:&nbsp; <font color="#0000FF"><%=faltaPagar %></font> </strong></td>
    </tr>
  <%} %>
    <tr bgcolor="#EEEEEE">
@@ -146,12 +146,13 @@ function verForm(){
     <td width="100" align="center"><strong>Vencimento</strong></td>
     <td width="60" align="center"><strong>Dinheiro</strong></td>
     <td width="60" align="center"><strong>Cheque</strong></td>
+    <td width="60" align="center"><strong>Outras Formas Pgto</strong></td>
    </tr>
    <tr>
-    <td colspan="8">
+    <td colspan="9">
      <table width="900" align="center" cellpadding="0" cellspacing="0">  
       <tr>
-       <td colspan="8" height="5"></td>
+       <td colspan="9" height="5"></td>
       </tr> 
 
    <%while (rs.next()){ %>
@@ -201,9 +202,10 @@ function verForm(){
     <%} %>
     <td height="30" width="60" align="center"><a href="sis_insert_recebimento_vale.jsp?receberID=<%=rs.getString("receberID")%>"><img src="ico/ico_money.png" width="20" height="20" border="0" title="Receber Essa Conta com Dinheiro" /></a></td>
     <td height="30" width="60" align="center"><a href="sis_insert_recebimento_vale_cheque.jsp?receberID=<%=rs.getString("receberID")%>"><img src="ico/ico_cheque.png" width="20" height="20" border="0" title="Receber Essa Conta com um CHEQUE" /></a></td>
+    <td height="30" width="60" align="center"><a href="sis_altera_forma_pgto.jsp?receberID=<%=rs.getString("receberID")%>"><img src="ico/outros_pag.jpg" width="30" height="30" border="0" title="Outras Formas de Pagamento" /></a></td>
    </tr>
    <tr>
-    <td colspan="8" align="center" style="height:1px"><hr style="border:1px solid #333333" /></td>
+    <td colspan="9" align="center" style="height:1px"><hr style="border:1px solid #333333" /></td>
    </tr>
    <%} %>
   

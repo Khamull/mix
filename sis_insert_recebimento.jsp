@@ -67,18 +67,34 @@ if(request.getParameter("msg") != null){
 <title>FORTE SYSTEM</title>
 
 <script type="text/javascript">
+var valida = 0;
 function verForm(){
-	
-	if(document.form1.livroID.value == "0"){
-		alert("Informe o Banco que irá receber esse Valor!");
-		document.form1.livroID.focus();
-		return false;
-	}else{
-		alert("Recebimento Realizado com Sucesso!");	
+	if(valida == 0){
+		if(document.form1.livroID.value == "0"){
+			alert("Informe o Banco que irá receber esse Valor!");
+			document.form1.livroID.focus();
+			return false;
+		}else{
+			alert("Recebimento Realizado com Sucesso!");	
+		}
 	}
-	
+	valida = 0;
+	return false;
 }
 
+function alterarPagamentos()//Encaminha para o PDV para que possa ser novamente selecionado nova forma de pagamento
+{
+	valida = 1;
+	if(confirm("Deseja Alterar Forma de Pagamento?"))
+		{
+			window.location.href="sis_altera_forma_pgto.jsp?receberID="+<%=request.getParameter("receberID")%>;
+		}
+	else
+		{
+			return false;
+		}
+	return false;
+}
 
 function validaDat(campo,valor) {
 	var date=valor;
@@ -202,7 +218,7 @@ if (event.keyCode<48 && event.keyCode!=44 || event.keyCode>57 && event.keyCode!=
     <td align="left" valign="top">N&deg; Venda/O.S.</td>
     <td width="82" align="left"><font color="#000099"><%=rs.getString("vendaID") %></font></td>
     <td width="73" align="left">Forma Pgto</td>
-    <td width="130" align="left"><font color="#000099"><%=rs.getString("descricao") %></font></td>
+    <td width="130" align="left"><font color="#000099"><%=rs.getString("descricao") %> <!-- input type="submit" value="alterar" onclick="alterarPagamentos();"/--></font></td>
   </tr>
   <tr>
     <td align="left" valign="top">Valor</td>
@@ -213,7 +229,7 @@ if (event.keyCode<48 && event.keyCode!=44 || event.keyCode>57 && event.keyCode!=
   <tr>
    <td colspan="4" height="10">
    <input type="hidden" name="valor" value="<%=rs.getString("valor")%>" />
-   <input type="hidden" name="receberID" value="<%=request.getParameter("receberID")%>">
+   <input type="hidden" name="receberID" value="<%=request.getParameter("receberID")%>"/>
    <input type="hidden" name="vendaID" value="<%=rs.getString("vendaID") %>" />
    <input type="hidden" name="formID" value="<%=rs.getString("formID") %>" />
    <input type="hidden" name="servico" value="<%=rs.getString("servico")%>" />

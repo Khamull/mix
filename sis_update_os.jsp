@@ -88,7 +88,7 @@ function verForm(){
 }
 
 function alterarProd(servicoProdutoID, servicoID ,prodID){
-	if (confirm("Editar Prodtuos?")){
+	if (confirm("Editar Produtos?")){
 		window.location.href = "sis_update_os.jsp?servicoID="+servicoID+"&altera=0";
 	}	
 }
@@ -298,8 +298,9 @@ function SalvarProd(servicoID){
 		          <%if(rs02.getString("rotinaID").equals("0") || rs02.getString("rotinaID").equals("1")) {%>
 		          	<%if(rs02.getString("caminhoArte") == null){%>
 		          		<td colspan="4"  align="center">Caminho Arte : <input type="text" name="caminhoArte" id="caminhoArte" onchange="caminho(<%=rs.getString("servicoID")%>, this)"/></td>
+		          	<%}else if(request.getParameter("altera") != null && request.getParameter("altera").equals("0")){ %>
+		          		<td colspan="4"  align="center">Caminho Arte : <input type="text" name="caminhoArte" id="caminhoArte" onchange="caminho(<%=rs.getString("servicoID")%>, this)" value="<%=rs02.getString("caminhoArte") %>"/>
 		          	<%}else{ %>
-		          		<td colspan="4"  align="center">Caminho Arte : <%=rs02.getString("caminhoArte") %></td>
 		          	<%} %>
 		          <%} %>
 		          <td  align="right"><a href="javascript: SalvarProd(<%=rs02.getString("servicoID")%>)"><img src="ico/ico_joinha.png" width="18" height="18" border="0" title="Salvar Alterações" /></a></td>

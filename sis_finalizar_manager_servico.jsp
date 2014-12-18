@@ -24,6 +24,7 @@
 Statement st01 = con.createStatement();
 Statement st02 = con.createStatement();
 Statement st09 = con.createStatement();
+Statement st10 = con.createStatement();
 %>
 
 <%
@@ -60,10 +61,17 @@ if(request.getParameter("desconto") != ""){
 }else{
 	venda.desconto = 0;
 }*/
-
+//SE o Receber ID não for Nulo, alteramos a forma de pagamento para a nova e mudamos para P
+if(request.getParameter("receberID") != null)
+{
+	receber.receberID = Integer.parseInt(request.getParameter("receberID"));
+	receber.forma.formPagID = Integer.parseInt(request.getParameter("formID"));
+	st10.execute(receber.alteraStatus());
+	st10.execute(receber.alteraFormaPgto());
+}
 
 //Adiciona ao objeto servico
-servico.servicoID 					= Integer.parseInt(request.getParameter("servicoID"));//passar todas as variaveis de novo via URL
+servico.servicoID 					= Integer.parseInt(request.getParameter("servicoID"));
 servico.formaPagamento.formPagID 	= Integer.parseInt(request.getParameter("formID"));
 servico.cliente.clienteID 			= Integer.parseInt(request.getParameter("clienteID"));
 servico.valor						= Float.parseFloat(request.getParameter("valorVariavel"));
@@ -202,78 +210,88 @@ if(servico.formaPagamento.formPagID != 1){
 	 dia = Integer.parseInt(data.diaAtual());
 	 mes = hoje.get(Calendar.MONTH);
  }else{
-	 //Senão corre as parcelas normais para a partir de hoje 30 / 60 / 90 / 120 / ... dias
-	 dia = Integer.parseInt(data.diaAtual());
-	 mes = hoje.get(Calendar.MONTH)+ 1;//Peguei o mes atual e somei mais um pois (Estranhamente) o Calendar está trazendo o mês anterior
+		 //Senão corre as parcelas normais para a partir de hoje 30 / 60 / 90 / 120 / ... dias
+		 dia = Integer.parseInt(data.diaAtual());
+		 mes = hoje.get(Calendar.MONTH)+ 1;//Peguei o mes atual e somei mais um pois (Estranhamente) o Calendar está trazendo o mês anterior
 	 
-	 //Trata a Data se ela existe daqui 30 dias
-	 String dataOk = data.verificaSeExiste(dia, mes);
+	 	//Trata a Data se ela existe daqui 30 dias
+	 	String dataOk = data.verificaSeExiste(dia, mes);
 	 
-	 //Da um Split e recupera o dia e o Mes novamente,
-	 //Porém agora já foi verificado se ele existe
-	 String[] vetor = new String[2];
-	 vetor = dataOk.split("-");
-	 dia = Integer.parseInt(vetor[0]);
-	 mes = Integer.parseInt(vetor[1]);
-	 
+		 //Da um Split e recupera o dia e o Mes novamente,
+		 //Porém agora já foi verificado se ele existe
+		 String[] vetor = new String[2];
+		 vetor = dataOk.split("-");
+		 dia = Integer.parseInt(vetor[0]);
+		 mes = Integer.parseInt(vetor[1]);
  }
  
- ano = Integer.parseInt(data.anoAtual());
- 
- %>
- 
-<%for(int i = 1; i <= servico.vezes; i++){%>
-
- <%
- //Acrescenta um mes
- String m = String.valueOf(i+mes);
- String d = String.valueOf(dia);
- 
- String dataOk2 = data.verificaSeExiste(Integer.parseInt(d), Integer.parseInt(m));
- 
- String[] vetor2 = new String[2];
- 
- vetor2 = dataOk2.split("-");
- 
- d = vetor2[0];
- m = vetor2[1];
- 
-	//verifica se não veio com duas casas e converte para duas casas
-	if(m.length() < 2){
-		m = "0"+m;
+ 	ano = Integer.parseInt(data.anoAtual());
+	if(request.getParameter("alteradata") != null && request.getParameter("alteradata").equals("1"))//Verifica se ocorreu alteração de data de vencimento
+	{
+		String [] DatasAlteradas = request.getParameterValues("dataParcela[]");//Insere datas a serem pagas alteradas
+		for(int i = 0; i <DatasAlteradas.length; i++){
+			String dataAtual = "";
+			 dataAtual = data.trataData(DatasAlteradas[i]);
+			 //dataAtual = data.converteDeData(dataAtual);
+			 //Atribui o numero da parcela e o dia de vencimento ao objeto > receber <
+			 receber.parcela = i;
+			 receber.vencimento = dataAtual;
+			 //A cada vez que passar pelo looping irá inserir a conta a receber na base de dados
+			 st.execute(receber.salvarReceberServico());
+		} 
 	}
-	
-	//verifica se não veio com duas casas e converte para duas casas
-	if(d.length() < 2){
-		d = "0"+d;
-	}
- 
- %>
+	else{
+	for(int i = 1; i <= servico.vezes; i++){
+		 String m = String.valueOf(i+mes);
+		 String d = String.valueOf(dia);
+		 
+		 String dataOk2 = data.verificaSeExiste(Integer.parseInt(d), Integer.parseInt(m));
+		 
+		 String[] vetor2 = new String[2];
+		 
+		 vetor2 = dataOk2.split("-");
+		 
+		 d = vetor2[0];
+		 m = vetor2[1];
+		 
+			//verifica se não veio com duas casas e converte para duas casas
+			if(m.length() < 2){
+				m = "0"+m;
+			}
+			
+			//verifica se não veio com duas casas e converte para duas casas
+			if(d.length() < 2){
+				d = "0"+d;
+			}
+		 
+		 %>
+		
+		 <% 
+		 //Junta as tres informações em uma String
+		 String dataAtual = d+"/"+m+"/"+ano;
+		 
+		 dataAtual = data.trataData(dataAtual);
+		 
+		 //dataAtual = data.converteDeData(dataAtual);
+		 %>
+		 
+		 <%=receber.valor %> <%=dataAtual%> <br>
+		 
+		 <%
+		 //Atribui o numero da parcela e o dia de vencimento ao objeto > receber <
+		 receber.parcela = i;
+		 receber.vencimento = dataAtual;
+		 %>
+		 
+		 <%
+		 //A cada vez que passar pelo looping irá inserir a conta a receber na base de dados
+		 st.execute(receber.salvarReceberServico());
+	 %>
+	 
+	 
+	<%}
+	} %>
 
- <% 
- //Junta as tres informações em uma String
- String dataAtual = d+"/"+m+"/"+ano;
- 
- dataAtual = data.trataData(dataAtual);
- 
- //dataAtual = data.converteDeData(dataAtual);
- %>
- 
- <%=receber.valor %> <%=dataAtual%> <br>
- 
- <%
- //Atribui o numero da parcela e o dia de vencimento ao objeto > receber <
- receber.parcela = i;
- receber.vencimento = dataAtual;
- %>
- 
- <%
- //A cada vez que passar pelo looping irá inserir a conta a receber na base de dados
- st.execute(receber.salvarReceberServico());
- %>
- 
- 
-<%} %>
 <br>#########################
 
 <%
@@ -347,9 +365,6 @@ st.execute(servicofechado.cadastraServicoFechado());
 			}
 		}
 	}
-
-
-
 %>
 
 
@@ -361,7 +376,14 @@ st.execute(servicofechado.cadastraServicoFechado());
 st09.execute(servico.atualizaFormPag(request.getParameter("OS"),request.getParameter("Ano"),request.getParameter("formID")));
 
 //Envia para a tela de impressão de pedido
-response.sendRedirect("sis_print_cupom_servico.jsp?servicoID="+servico.servicoID+"&OS="+request.getParameter("OS")+"&Ano="+request.getParameter("Ano"));//Caso der algum problema é só comentar essa linha que irá aparecer na tela todas as informações do Pagamento da Compra
+if(request.getParameter("receberID") != null)
+{
+	response.sendRedirect("sis_print_cupom_servico.jsp?servicoID="+servico.servicoID+"&OS="+request.getParameter("OS")+"&Ano="+request.getParameter("Ano")+"&receberID="+request.getParameter("receberID"));//Caso der algum problema é só comentar essa linha que irá aparecer na tela todas as informações do Pagamento da Compra
+}
+else
+{
+	response.sendRedirect("sis_print_cupom_servico.jsp?servicoID="+servico.servicoID+"&OS="+request.getParameter("OS")+"&Ano="+request.getParameter("Ano"));//Caso der algum problema é só comentar essa linha que irá aparecer na tela todas as informações do Pagamento da Compra
+}
 %>
 
 

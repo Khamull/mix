@@ -24,9 +24,6 @@
 
 <jsp:useBean id="os" class="servico.Servico" scope="page"></jsp:useBean>
 
-
-
-
 <%
 //Instancia um objeto do tipo Statement para ajudar na query
 Statement st01 = con.createStatement();
@@ -98,7 +95,7 @@ int servicoID = Integer.MIN_VALUE;
 
 	
 	//Recupera Arrays dos Materiais
-	String [] Produtos = request.getParameterValues("produtoID[]");//Dimensões Informadas na OS
+	String [] Produtos  = request.getParameterValues("produtoID[]");//Dimensões Informadas na OS
 	String [] Altura    =    request.getParameterValues("altura[]");
 	String [] Largura	= request.getParameterValues("largura[]");
 	//String [] Quantidade= request.getParameterValues("Quantidade[]");
@@ -107,8 +104,7 @@ int servicoID = Integer.MIN_VALUE;
 	String [] QuantidadeR	= request.getParameterValues("qtdProduto[]");
 	String [] valorProduto = request.getParameterValues("valorProdutoTotal[]");
 	String [] caminho_ = request.getParameterValues("caminho[]");
-	
-	
+		
 	for(int j = 0; j < Produtos.length; j++){
 		produtos.produtoID = Integer.parseInt(Produtos[j]);
 		rs10 = st10.executeQuery(produtos.pesquisaProdutoID());

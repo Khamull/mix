@@ -19,6 +19,8 @@
 
 <jsp:useBean id="cliente" class="cadastro.Cliente" scope="page"></jsp:useBean>
 
+<jsp:useBean id="receber" class="financeiro.Receber" scope="page"></jsp:useBean>
+
 <%
 //Instacia objeto do tipo Statment para usar na query
 Statement st01 = con.createStatement();
@@ -37,15 +39,15 @@ ResultSet rs03 = null;
 
 <%
 //Verifica se foi passado o parametro servicoID via URL
-if(request.getParameter("servicoID") != null){
+if(request.getParameter("receberID") != null){
 	//Se foi Atribui ele ao objeto servico
-	servico.servicoID = Integer.parseInt(request.getParameter("servicoID"));
+	receber.receberID = Integer.parseInt(request.getParameter("receberID"));
 }else{
 	//Senão: Redireciona para o Menu Principal
 	response.sendRedirect("sis_menu.jsp");
 }
 //Pesquisa o Total do Serviço
-rs = st.executeQuery(servico.pesquisaServico());
+rs = st.executeQuery(receber.receberPorID());
 //rs = st.executeQuery(itens.totalItem());
 //Verifica se retornou algum resultado e atribui a uma variavel
 
@@ -129,9 +131,9 @@ function verForm(){
 		var troco = document.form1.troco.value;
 		var valorTotalVenda = <%=rs.getString("valor")%>;
 		var valorVariavel = <%=rs.getString("valor")%>;
-        var servicoID = <%=request.getParameter("servicoID")%>;
-        var OS = <%=request.getParameter("OS") %>;
-        var ano = <%=request.getParameter("Ano") %>;
+        var servicoID = <%=rs.getString("servicoID")%>;
+        var OS = <%=rs.getString("OS") %>;
+        var ano = <%=rs.getString("anoServico") %>;
 		//alert(document.form1.parcelas.value);
 		//var width = 150;// dados para a abertura da nova janela! Vamos fazer todas as outras chamadas a partir dela, infelizmente
 		//var height = 250;
@@ -140,7 +142,7 @@ function verForm(){
 		window.location.href = "sis_altera_pagamentos.jsp?parcelas="+parcelas+"&formID="+formID+"&clienteID="+clienteID+"&desconto="+desconto+"&entrada="+entrada+"&troco="+troco+"&valorTotal="+valorTotalVenda+"&servicoID="+servicoID+"&OS="+OS+"&Ano="+ano+"&valorVariavel="+valorVariavel;
 			return false;
 		}else{
-			return true;
+			return false;
 		}		
 		return false;
 	}
@@ -345,7 +347,7 @@ function ValidaVendaVale(){
 <div id="corpo">
 
 <!--INICIO DO FORMULÁRIO DE VENDAS-->
- <form name="form1" method="post" action="sis_finalizar_manager_servico.jsp?OS=<%=request.getParameter("OS") %>&Ano=<%=request.getParameter("Ano") %>" id="form1" onSubmit="return verForm(this)">
+ <form name="form1" method="post" action="sis_finalizar_manager_servico.jsp?OS=<%=rs.getString("OS") %>&Ano=<%=rs.getString("anoServico") %>&receberID=<%=rs.getString("receberID") %>" id="form1" onSubmit="return verForm(this)">
    <table width="985" height="440" >
     <tr>
      <td height="20" colspan="2" align="center"><strong>PAGAMENTOS<!-- E FINALIZAR SERVI&Ccedil;O--></strong></td>
@@ -433,7 +435,7 @@ function ValidaVendaVale(){
           <td>
            <input type="hidden" name="totalDaVenda" value="<%=rs.getString("valor")%>" />
            <input type="hidden" name="valorVariavel" value="<%=rs.getString("valor")%>" />
-           <input type="hidden" name="servicoID" value="<%=request.getParameter("servicoID")%>" />
+           <input type="hidden" name="servicoID" value="<%=rs.getString("servicoID")%>" />
           </td>
           <td colspan="2" height="50" align="left" class="totalPDV"><input name="totalVenda" type="text" class="totalPDV" value="<%=subTotal %>" readonly="readonly" /></td>
          </tr>

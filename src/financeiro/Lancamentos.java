@@ -162,6 +162,7 @@ public class Lancamentos {
 				total+=	" where date(receber.dataAlteracao) = date('"+Data+"') ";
 				total+=" and cliente.clienteID = receber.clienteID ";
 				total+=" and cliente.clienteID = '"+clienteID+"'";
+				total+=" and receber.status = 'P'";
 		
 		return total;
 	}
@@ -171,6 +172,7 @@ public class Lancamentos {
 				total+=	" where date(receber.dataAlteracao) = date('"+Data+"') ";
 				total+=" and cliente.clienteID = receber.clienteID ";
 				total+=" and cliente.clienteID = '"+clienteID+"'";
+				total+=" and receber.status <> 'D'";
 		
 		return total;
 	}
