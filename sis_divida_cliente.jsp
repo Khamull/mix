@@ -172,7 +172,7 @@ function verForm(){
    %>
    
    <tr>
-    <td height="30" width="100" align="left"><%=rs.getShort("vendaID")+"/"+ data.converteDeData(rs.getString("dataAlteracao").substring(0,10)).substring(6,10)%></td>
+    <td height="30" width="100" align="left"><%=rs.getShort("OS")+"/"+ data.converteDeData(rs.getString("dataAlteracao").substring(0,10)).substring(6,10)%></td>
     <td height="30" width="280" align="left">
     <%
     //Verifica se ele vendeu para um Cliente Cadastrado ou nao e trata a informaçao

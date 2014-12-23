@@ -292,10 +292,10 @@ public class Receber {
 	public String pesquisaContaCliente() {
 		String pesquisa = "SELECT cliente.clienteID, cliente.clienteNomeFantasia, ";//cliente
 		pesquisa += "formapagamento.formID, formapagamento.descricao, ";//forma de Pagamento
-		pesquisa += "receber.*";//receber
+		pesquisa += "receber.*, servico.*";//receber
 		pesquisa += "FROM receber ";//Tabela Principal
 		pesquisa += "LEFT JOIN cliente ON cliente.clienteID = receber.clienteID ";//LEFT JOIN cliente
-		pesquisa += "INNER JOIN formapagamento ON formapagamento.formID = receber.formID ";//INNER JOIN forma de Pagamento
+		pesquisa += "INNER JOIN formapagamento ON formapagamento.formID = receber.formID INNER JOIN servico on servico.servicoID = receber.vendaID ";//INNER JOIN forma de Pagamento
 		pesquisa += "WHERE receber.status = 'D' AND receber.formID = '7' AND receber.clienteID = '"+cliente.clienteID+"'";//se status for igual a 'D' de DEVENDO e Venda igual Vale
 		pesquisa += "ORDER BY receber.vencimento ASC";
 		

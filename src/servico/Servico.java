@@ -84,10 +84,10 @@ public class Servico {
 		return "SELECT * FROM servico ORDER BY servicoID DESC";
 	}
 	
-	public String listaServicosRelatorios(String dtInic, String dtFim, String depart, int St, Boolean prazo) {
+	public String listaServicosRelatorios(String dtInic, String dtInicPrev, String dtFim, String dtFimPrev, String depart, int St, Boolean prazo) {
 		String listaServ=""; 
 		String Controle = "";
-		listaServ += " select distinct servico.OS,	";
+		listaServ += " select distinct (servico.OS),";
 		listaServ += " servico.anoServico,			";
 		listaServ += " servico.servicoID, 			";
 		listaServ += " servico.dataInicio, 			";
@@ -104,10 +104,43 @@ public class Servico {
 		listaServ += " servico.nivelUsuario,		";
 		listaServ += " cliente.clienteNomeFantasia 	";
 		listaServ += " from servico inner join cliente on cliente.clienteID = servico.clienteID";
+		listaServ += " where servico.OS <> 0 ";
 		if(!dtInic.equals("") && !dtFim.equals(""))//Somente datas foram informadas
 		{
+			listaServ += " and servico.dataInicio between '"+dtInic+"' and '"+dtFim+"'";
+		}
+		if(!dtInic.equals("") && dtFim.equals(""))//Somente datas foram informadas
+		{
+			listaServ += " and servico.dataInicio = '"+dtInic+"' ";
+		}
+		if(!depart.equals("") && !depart.equals("-1"))//Datas selecionadas e com departamento específico
+		{
+			listaServ += " and servico.nivelUsuario = '"+depart+"' ";
+		}
+		if(St == 1){//Datas selecionadas e com um status específico
+			listaServ += "and servico.status = 'M' ";
+		}
+		if(St == 2)
+		{
+			listaServ += " and servico.status = 'F' ";
+		}
+		if(prazo){// Para que esteja fora do prazo, o select tem que retornar os servico que estejam data fim maior que data prevista
+			//listaServ += " and servico.dataprevista < curdate() ";
+			listaServ += " and servico.dataprevista < servico.dataFim ";
+		}
+		if(!dtInicPrev.equals("") && !dtFimPrev.equals(""))
+		{
+			listaServ += " and servico.dataprevista between '"+dtInicPrev+"' and '"+dtFimPrev+"'";
+		}
+		if(!dtInicPrev.equals("") && dtFimPrev.equals(""))
+		{
+			listaServ += " and servico.dataprevista = '"+dtInicPrev+"' ";
+		}
+		
+		/*if(!dtInicPrev.equals("") && !dtFimPrev.equals(""))//Somente datas foram informadas
+		{
 			Controle = "1";
-			listaServ += " where servico.dataInicio between '"+dtInic+"' and '"+dtFim+"'";
+			listaServ += " and servico.dataprevista between '"+dtInicPrev+"' and '"+dtFimPrev+"'";
 			if(!depart.equals("") && !depart.equals("-1"))//Datas selecionadas e com departamento específico
 			{
 				listaServ += " and servico.nivelUsuario = '"+depart+"' ";
@@ -124,9 +157,29 @@ public class Servico {
 				listaServ += " and servico.dataprevista < servico.dataFim ";
 			}
 		}
+		
 		if(!dtInic.equals("") && dtFim.equals(""))//Procura somente por uma data específica
 		{
-			listaServ += " where servico.dataInicio = '"+dtInic+"' ";
+			listaServ += " and servico.dataInicio = '"+dtInic+"' ";
+			if(!depart.equals("") && !depart.equals("-1"))//Datas selecionadas e com departamento específico
+			{
+				listaServ += " and servico.nivelUsuario = '"+depart+"' ";
+			}
+			if(St == 1){//Datas selecionadas e com um status específico
+				listaServ += "and servico.status = 'M' ";
+			}
+			if(St == 2)
+			{
+				listaServ += " and servico.status = 'F' ";
+			}
+			if(prazo){// Para que esteja fora do prazo, o select tem que retornar os servico que estejam data fim maior que data prevista
+				//listaServ += " and servico.dataprevista < curdate() ";
+				listaServ += " and servico.dataprevista < servico.dataFim ";
+			}
+		}
+		if(!dtInicPrev.equals("") && dtFimPrev.equals("") )//Procura somente por uma data específica prevista
+		{
+			listaServ += " and servico.dataInicio = '"+dtInic+"' ";
 			if(!depart.equals("") && !depart.equals("-1"))//Datas selecionadas e com departamento específico
 			{
 				listaServ += " and servico.nivelUsuario = '"+depart+"' ";
@@ -145,27 +198,27 @@ public class Servico {
 		}
 		if(dtInic.equals("") && dtFim.equals("") && St!=2 && St != 1 && !prazo && !depart.equals("") && !depart.equals("-1"))//Somente o departamento atual foi consultado
 		{
-			listaServ += " where servico.nivelUsuario = '"+depart+"' ";
+			listaServ += " and servico.nivelUsuario = '"+depart+"' ";
 		}
 		if(St != 0 && depart.equals("-1"))//somente a cusulta por status foi usada
 		{
 			if(dtInic.equals("") && dtFim.equals("")){
 				if(St == 1)
 				{
-					listaServ += " where servico.status = 'M' ";
+					listaServ += " and servico.status = 'M' ";
 				}
 				if(St == 2)
 				{
-					listaServ += " where servico.status = 'F' ";
+					listaServ += " and servico.status = 'F' ";
 				}
 			}
 		}
 		if(prazo)//Somente a consulta por prazo
 		{
 			if(!Controle.equals("1"))
-				listaServ += " where servico.dataprevista < servico.dataFim ";
+				listaServ += " and servico.dataprevista < servico.dataFim ";
 		}
-		
+		//listaServ += " order by servico.OS ";*/
 		return listaServ;
 	}
 	

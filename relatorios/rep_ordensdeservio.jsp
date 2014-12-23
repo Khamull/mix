@@ -44,12 +44,36 @@ rs01 = st01.executeQuery(empresa.dadosEmpresa());
 int St = 0;
 String dtInic = "";
 String dtFim = "";
+String dtInicPrev = "";
+String dtFimPrev = "";
 String depart = "";
 Boolean prazo = false;
 if(request.getParameter("st") != null)
 {
 	St = Integer.parseInt(request.getParameter("st"));
 }
+if(request.getParameter("dataInicPrev")!=null)
+{
+	dtInicPrev = request.getParameter("dataInicPrev");
+	if(!dtInicPrev.equals(""))
+	{
+		if(dtInicPrev.substring(2,3).equals("/")){
+			dtInicPrev = data.converteParaData(dtInicPrev);
+		}
+	}
+}
+if(request.getParameter("dataFimPrev")!=null){
+	
+	dtFimPrev = request.getParameter("dataFimPrev");
+	if(!dtFimPrev.equals(""))
+	{
+		if(dtFimPrev.substring(2,3).equals("/"))
+		{
+			dtFimPrev = data.converteParaData(dtFimPrev);
+		}
+	}
+}
+
 if(request.getParameter("dataInic")!=null)
 {
 	dtInic = request.getParameter("dataInic");
@@ -60,7 +84,7 @@ if(request.getParameter("dataInic")!=null)
 		}
 	}
 }
-if(request.getParameter("dataFim")!=null){
+if(request.getParameter("dataFim")!=null){//Perido final do interval0
 	
 	dtFim = request.getParameter("dataFim");
 	if(!dtFim.equals(""))
@@ -77,8 +101,8 @@ if(request.getParameter("depart") != null){
 if(request.getParameter("prazo") != null){
 	prazo =  Boolean.valueOf(request.getParameter("prazo"));
 }
-rs02 = st02.executeQuery(servico.listaServicosRelatorios(dtInic, dtFim,depart, St,prazo));
-rs06 = st06.executeQuery(servico.listaServicosRelatorios(dtInic, dtFim,depart, St,prazo));
+rs02 = st02.executeQuery(servico.listaServicosRelatorios(dtInic,dtInicPrev, dtFim, dtFimPrev, depart, St,prazo));
+rs06 = st06.executeQuery(servico.listaServicosRelatorios(dtInic,dtInicPrev, dtFim, dtFimPrev, depart, St,prazo));
 
 Double valTotal = 0.0;
 Double valEntradas = 0.0;
@@ -134,7 +158,7 @@ String telefone = "";
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>RELATÓRIO - OS's</title>
 <script type="text/javascript">
-function EnviarPesquisa(dataInic, dataFim, depart, prazo)
+function EnviarPesquisa(dataInic, dataInicPrev, dataFimPrev,dataFim, depart, prazo)
 {
 	//alert(dataInic.value+" "+dataFim.value+" "+depart.value+" "+st.value+" "+prazo.value);
 	var st =0;
@@ -147,7 +171,7 @@ function EnviarPesquisa(dataInic, dataFim, depart, prazo)
 	if(document.getElementById('status3').checked){
 		st =  document.getElementById('status3').value;
 	}
-	window.location.href="rep_ordensdeservio.jsp?dataInic="+dataInic.value+"&dataFim="+dataFim.value+"&depart="+depart.value+"&st="+st+"&prazo="+prazo.checked;
+	window.location.href="rep_ordensdeservio.jsp?dataInic="+dataInic.value+"&dataInicPrev="+dataInicPrev.value+"&dataFimPrev="+dataFimPrev.value+"&dataFim="+dataFim.value+"&depart="+depart.value+"&st="+st+"&prazo="+prazo.checked;
 	
 		
 }
@@ -250,6 +274,26 @@ function EnviarPesquisa(dataInic, dataFim, depart, prazo)
 		       		</table>
 		       	</td>
 		       	<td>
+		       	<table>
+	   					<tr>
+	   						<td>
+	   							Data Inicio(Previsão) 
+	   						</td>
+	   						<td>
+	   							<input type="date" name="dataInicPrev" id="dataInicPrev" value="" placeholder="dd/mm/aaaa"/>
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							Data Fim(Previsão)
+	   						</td>
+	   						<td>
+	   							<input type="date" name="dataFimPrev" id="dataFimPrev" value="" placeholder="dd/mm/aaaa"/>
+	   						</td>
+	   					</tr>
+		       		</table>
+		       	</td>	
+		       	<td>
 		       		Departamento <select name="depart" value="" id="depart">
 		       							<option value="-1">Selecione...</option>
 										<option value="2">Atendimento</option>
@@ -287,8 +331,8 @@ function EnviarPesquisa(dataInic, dataFim, depart, prazo)
 	   			</td>
 	   		</tr>
 	   		<tr>
-	   			<td colspan="4" align="center">
-	   				<input type='button' value="pesquisar" onclick="EnviarPesquisa(document.getElementById('dataInic'), document.getElementById('dataFim'), document.getElementById('depart'), document.getElementById('prazoVencido'))"/>
+	   			<td colspan="5" align="center">
+	   				<input type='button' value="pesquisar" onclick="EnviarPesquisa(document.getElementById('dataInic'), document.getElementById('dataInicPrev'), document.getElementById('dataFimPrev'), document.getElementById('dataFim'),document.getElementById('depart'), document.getElementById('prazoVencido'))"/>
 	   			</td>
 	   		</tr>
 		 	</table>

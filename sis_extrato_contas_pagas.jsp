@@ -226,7 +226,7 @@ body{
    
    <%while(rs01.next()){ %>
    <tr>
-    <td align="left"><%=rs01.getString("vendaID") %></td>
+    <td align="left"><%=rs01.getString("OS")+"/"+rs01.getString("anoServico").substring(0,4) %></td>
     <td align="center"><%=data.converteDeData(String.valueOf(rs01.getDate("vencimento"))) %></td>
     <td align="right"><%=formato.format(rs01.getDouble("valor")) %></td>
    </tr>

@@ -188,6 +188,11 @@ function abreRelatorio(diaA, mesA, anoA, diaB, mesB, anoB, forma, clienteID){
    </td>
    <td width="62" align="left">
    <select name="anoA" style="width:60px">
+    <option value="<%=Integer.parseInt(datas.anoAtual())+5 %>"><%=Integer.parseInt(datas.anoAtual())+5 %></option>
+    <option value="<%=Integer.parseInt(datas.anoAtual())+4 %>"><%=Integer.parseInt(datas.anoAtual())+4 %></option>
+    <option value="<%=Integer.parseInt(datas.anoAtual())+3 %>"><%=Integer.parseInt(datas.anoAtual())+3 %></option>
+    <option value="<%=Integer.parseInt(datas.anoAtual())+2 %>"><%=Integer.parseInt(datas.anoAtual())+2 %></option>
+    <option value="<%=Integer.parseInt(datas.anoAtual())+1 %>"><%=Integer.parseInt(datas.anoAtual())+1 %></option>
     <option value="<%=datas.anoAtual() %>" selected="selected"><%=datas.anoAtual() %></option>
     <option value="<%=Integer.parseInt(datas.anoAtual())-1 %>"><%=Integer.parseInt(datas.anoAtual())-1 %></option>
     <option value="<%=Integer.parseInt(datas.anoAtual())-2 %>"><%=Integer.parseInt(datas.anoAtual())-2 %></option>
@@ -265,6 +270,11 @@ function abreRelatorio(diaA, mesA, anoA, diaB, mesB, anoB, forma, clienteID){
    </td>
    <td width="78" align="left">
    <select name="anoB" style="width:60px">
+    <option value="<%=Integer.parseInt(datas.anoAtual())+5 %>"><%=Integer.parseInt(datas.anoAtual())+5 %></option>
+    <option value="<%=Integer.parseInt(datas.anoAtual())+4 %>"><%=Integer.parseInt(datas.anoAtual())+4 %></option>
+    <option value="<%=Integer.parseInt(datas.anoAtual())+3 %>"><%=Integer.parseInt(datas.anoAtual())+3 %></option>
+    <option value="<%=Integer.parseInt(datas.anoAtual())+2 %>"><%=Integer.parseInt(datas.anoAtual())+2 %></option>
+    <option value="<%=Integer.parseInt(datas.anoAtual())+1 %>"><%=Integer.parseInt(datas.anoAtual())+1 %></option>
     <option value="<%=datas.anoAtual() %>" selected="selected"><%=datas.anoAtual() %></option>
     <option value="<%=Integer.parseInt(datas.anoAtual())-1 %>"><%=Integer.parseInt(datas.anoAtual())-1 %></option>
     <option value="<%=Integer.parseInt(datas.anoAtual())-2 %>"><%=Integer.parseInt(datas.anoAtual())-2 %></option>

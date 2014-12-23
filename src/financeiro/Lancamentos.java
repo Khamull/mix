@@ -162,17 +162,17 @@ public class Lancamentos {
 				total+=	" where date(receber.dataAlteracao) = date('"+Data+"') ";
 				total+=" and cliente.clienteID = receber.clienteID ";
 				total+=" and cliente.clienteID = '"+clienteID+"'";
-				total+=" and receber.status = 'P'";
+				total+=" and receber.status = 'P' ";
 		
 		return total;
 	}
 	
 	public String RecebidosporClientePorData(String clienteID, String Data) {
-		String total =  " SELECT  receber.*, cliente.* from receber, cliente "; 
+		String total =  " SELECT  receber.*, cliente.*, servico.* from receber, cliente, servico "; 
 				total+=	" where date(receber.dataAlteracao) = date('"+Data+"') ";
 				total+=" and cliente.clienteID = receber.clienteID ";
 				total+=" and cliente.clienteID = '"+clienteID+"'";
-				total+=" and receber.status <> 'D'";
+				total+=" and receber.status <> 'D' and servico.servicoID = receber.vendaID ";
 		
 		return total;
 	}
