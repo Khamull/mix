@@ -68,6 +68,10 @@ if(rs11.next()){
 	
 	servico.OS = Integer.toString(rs11.getInt("OS")+1);//atribui valor para a OS da classe servico, que fará a inserção do valor.
 }
+else{
+	servico.OS = "1";
+}
+
 
 String nivel = (String) session.getAttribute("nivel");
 

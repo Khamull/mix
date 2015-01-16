@@ -64,6 +64,9 @@ if(rs11.next()){
 	
 	servico.OS = Integer.toString(rs11.getInt("OS")+1);//atribui valor para a OS da classe servico, que fará a inserção do valor.
 }
+else{
+	servico.OS = "1";
+}
 
 //Recupera valores do formulário e atribui ao objeto servico
 servico.cliente.clienteID 	= Integer.parseInt((String)request.getParameter("clienteID").trim());

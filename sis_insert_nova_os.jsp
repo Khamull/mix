@@ -700,8 +700,9 @@ function verPonto_Calculo(val){
 	<%}
 	 else
 	 { %>
+	 	<td align="left"><!-- N&deg; O.S.--></td>
 	 	<td align="left">
-			<input type="number" min="0" step="1" value="1" name="os" style="width:50px;text-align: right" required align="left" ><strong><%="/"+cal.get(Calendar.YEAR) %></strong>
+			<!-- input type="number" min="0" step="1" value="1" name="OS" style="width:50px;text-align: right" required align="left" ><strong><%="/"+cal.get(Calendar.YEAR) %></strong-->
 		</td>
 	 <%} %>
     <td width="52" align="left">Cliente</td>

@@ -55,7 +55,7 @@ if(rs04.next())
  					}
  				}
  			}
- 			if(nivel.equals("2") && fase.equals("ORCAMENTO ACEITO") || fase.equals("ORÇAMENTO"))//Da Artefinal para gerencia
+ 			if(nivel.equals("1") || nivel.equals("2") && fase.equals("ORÇAMENTO ACEITO") || fase.equals("ORÇAMENTO"))//Da Artefinal para gerencia
  			{
  				st01.execute(servico.encaminhado1(3, "NOVO", Integer.parseInt(request.getParameter("servicoID"))));
  				String idusuario = (String) session.getAttribute("usuarioID");
@@ -98,7 +98,7 @@ if(rs04.next())
  					}
  				}
  			}
- 			if(nivel.equals("2") && fase.equals("ORCAMENTO ACEITO") || fase.equals("ORÇAMENTO"))//Da Artefinal para gerencia
+ 			if(nivel.equals("1") || nivel.equals("2") && fase.equals("ORÇAMENTO ACEITO") || fase.equals("ORÇAMENTO"))//Da Artefinal para gerencia
  			{
  				st01.execute(servico.encaminhado1(3, "NOVO", Integer.parseInt(request.getParameter("servicoID"))));
  				String idusuario = (String) session.getAttribute("usuarioID");
@@ -200,9 +200,9 @@ if(rs04.next())
  					}
  				}
  			}
- 			if(nivel.equals("2") && fase.equals("ORCAMENTO ACEITO") || fase.equals("ORÇAMENTO"))//Do Orçamento aceito para Produção
+ 			if(nivel.equals("1") || nivel.equals("2") && fase.equals("ORÇAMENTO ACEITO") || fase.equals("ORÇAMENTO"))//Do Orçamento aceito para Produção
  			{
- 				st01.execute(servico.encaminhado1(6, "NOVO", Integer.parseInt(request.getParameter("servicoID"))));
+ 				st01.execute(servico.encaminhado1(8, "NOVO", Integer.parseInt(request.getParameter("servicoID"))));
  				String idusuario = (String) session.getAttribute("usuarioID");
  				st02.execute(servico.atualizaHistoricoStatusFinalizado(request.getParameter("nivelusuario"), request.getParameter("servicoID"), idusuario, "NOVO"));//Matem Hustórico de todas as mudanças
  			}
