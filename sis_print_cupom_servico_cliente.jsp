@@ -1,3 +1,4 @@
+<%@page import="cadastro.Endereco"%>
 <%@ page import="java.sql.*" %>
 <%@ include file="inc/conexao.jsp" %>
 <%@ include file="inc/seguranca.jsp" %>
@@ -118,6 +119,11 @@ cliente.clienteID = Integer.parseInt(rs02.getString("clienteID"));
 //Variaveis que irá receber os dados do Cliente
 String nome = "";
 String cpf = "";
+String CliEndereco = "";
+String CliCidade = "";
+String CliCEP = "";
+String CliCep = "";
+String CliUf="";
 
 rs05 = st05.executeQuery(cliente.clienteID());
 
@@ -126,6 +132,10 @@ rs05 = st05.executeQuery(cliente.clienteID());
 if(rs05.next()){
 	nome = rs05.getString("clienteNomeFantasia");
 	cpf = rs05.getString("clienteCnpj");
+	CliEndereco = rs05.getString("clienteEndereco")+", "+rs05.getString("clienteNumero")+ ", "+rs05.getString("clienteBairro");
+	CliCidade = rs05.getString("clienteCidade");
+	CliCep = rs05.getString("clienteCEP");
+	CliUf = rs05.getString("clienteUf");
 }
 %>
 
@@ -324,9 +334,25 @@ while(rs.next()){
 
 </tr>
 <tr>
-<td>Prd: <%=prd %></td>
+	<td>Prd: <%=prd %></td>
 	<td>Dimen.</p><%=altura%> X <%=largura %></td>
 </tr>
+<tr>
+	<td>
+		Endereco :<%=CliEndereco%>
+	</td>
+</tr>
+<tr>
+	<td>
+		Cidade :<%=CliCidade%>
+	</td>
+</tr>	
+<tr>
+	<td>
+		CEP :<%=CliCEP%> UF :<%=CliUf%>
+	</td>
+</tr>	
+
 </table>
 
 </div>

@@ -203,11 +203,22 @@ function confirmaFinalizacao(servicoID, nivelUsuario){
     <%if(!rs.getString("dataprevista1").equals("0")){%>
     	<%=data.converteDeData(rs.getString("dataprevista1")) %></strong></TD>
     <%}%>
-    <td colspan="2" align="left">
+    <td align="left">
     Tel: <%=rs.getString("clienteTelefone") %> &nbsp;&nbsp;&nbsp;
     Cel: <%=rs.getString("clienteCelular") %> <%=rs.getString("operadoraCelular") %>
     </td>
     <td><%=rs.getString("clienteEmail") %></td>
+    </tr>
+    <tr>
+    <td colspan="5">
+	    <table>
+	    	<tr>
+	    		<td>
+	    			<strong>Endereço :</strong> <%=rs.getString("clienteEndereco") %>, <%=rs.getString("clienteNumero") %>, <%=rs.getString("clienteBairro") %>, <%=rs.getString("clienteCidade") %> - <strong>CEP :</strong>  <%=rs.getString("clienteCep") %> <strong>UF :</strong>  <%=rs.getString("clienteUf") %>
+	    		</td>
+	    	</tr>
+	    </table>	
+    </td>
     </tr>
   <tr bgcolor="#F9F6F2">
     <td align="left"><%if(session.getAttribute("nivel").equals("1") || session.getAttribute("nivel").equals("2")){ %>VALOR TOTAL<%} %></td>

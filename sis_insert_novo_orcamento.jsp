@@ -704,7 +704,7 @@ function verPonto_Calculo(val){
 		</td>
 	 <%} %>
     <td width="52" align="left">Cliente</td>
-    <td width="240" align="left" colspan="2">
+    <td width="240" align="left">
     <%if(request.getParameter("clienteID") != null){%>
 	   	<select name="clienteID" onchange="pesquisaCliente(<%=request.getParameter("clienteID")%>)" required>
 			<option value="<%if(rs01.next()){ %> <%=rs01.getString("clienteID") %><%}%>" selected="selected"><%=rs01.getString("clienteNomeFantasia") %></option>
@@ -749,6 +749,18 @@ function verPonto_Calculo(val){
 	    Tel: <%=Telefone %>  &nbsp;&nbsp;&nbsp;
 	    Cel: <%=Celular %> <%=Operadora %> 
 	    </td>
+	    <td><table>
+   		<tr>
+   			<td>
+   				<strong>Endereço: </strong>
+	   				<%=rs04.getString("clienteEndereco") %>, 
+	   				<%=rs04.getString("clienteNumero") %>, 
+	   				<%=rs04.getString("clienteBairro")%> - 
+	   				<strong>CEP: </strong><%=rs04.getString("clienteCEP")%>
+	   				<strong>UF: </strong><%=rs04.getString("clienteUF")%>
+   			</td>
+   		</tr>	
+   </table></td>
     <%} %>
     	
     </tr>
